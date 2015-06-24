@@ -20,8 +20,17 @@ namespace Tetris
 
     }
     public delegate void MoveEventHandle(Object sender, MoveEventArgs e);
+    
+    /// <summary>
+    /// 一次次掉下的方块
+    /// </summary>
     class Box
     {
+        public enum BoxShape
+        {
+            Z,S,T,I,O,L,J
+        }
+
         public event MoveEventHandle move;
 
         public Box()
@@ -108,6 +117,7 @@ namespace Tetris
         protected Position pos;//表示第一个方块的位置
         protected int state;//表示当前是形态多少号
         protected List<Square> entity;//记录整个Box所有方块的相对位置
+        public BoxShape shape;
 
     }
 

@@ -18,6 +18,7 @@ namespace Tetris
             this.grid = grid;
             this.row = row;
             this.column = column;
+            isPlaying = false;
 
             for (int i = 0; i < row; i++)
             {
@@ -31,12 +32,8 @@ namespace Tetris
             map = new int[row][];
             for (int i = 0; i < row; i++)
                 map[i] = new int[column];
-            
-            for (int i=0;i<row;i++)
-                for (int j=0;j<column;j++)
-                {
-                    map[i][j] = 0;
-                }
+
+            ClearMap();
 
         }
 
@@ -65,6 +62,15 @@ namespace Tetris
             }
         }
 
+        private void ClearMap()
+        {
+            for (int i = 0; i < row; i++)
+                for (int j = 0; j < column; j++)
+                {
+                    map[i][j] = 0;
+                }
+        }
+
         public bool UnitAvilible(int x,int y)
         {
             if (x >= row || x < 0 || y >= column || y < 0)
@@ -81,13 +87,35 @@ namespace Tetris
 
         public void Start()
         {
+            ClearMap();
+
             activeBox = BoxFactory.GetNewBasicBox(this);
             readyBox = BoxFactory.GetNewBasicBox(this);
+
+            isPlaying = true;
 
             box_Timer.Interval = new TimeSpan(boxDropInterval);
             box_Timer.Tick += new EventHandler(BoxTimerTick);
             box_Timer.Start();
             
+        }
+
+        public void Pause()
+        {
+            box_Timer.Stop();
+            isPlaying = false;
+        }
+
+        public void Continue()
+        {
+            box_Timer.Start();
+            isPlaying = true;
+        }
+
+        public void Stop()
+        {
+            isPlaying = false;
+            box_Timer = null;
         }
 
         public void BoxTimerTick(Object sender,EventArgs e)
@@ -130,5 +158,6 @@ namespace Tetris
         public Box activeBox;
         public Box readyBox;
         private DispatcherTimer box_Timer;
+        private bool isPlaying;
     }
 }

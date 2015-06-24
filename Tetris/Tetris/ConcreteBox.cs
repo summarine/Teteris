@@ -14,6 +14,7 @@ namespace Tetris
         public L_Box(GameFrame gf) : base()
         {
             this.gFrame = gf;
+            this.shape = BoxShape.L;
             List<Position> lp = new List<Position>{
                 new Position(0,0),
                 new Position(0,1),
@@ -32,6 +33,7 @@ namespace Tetris
             : base()
         {
             this.gFrame = gf;
+            this.shape = BoxShape.J;
             List<Position> lp = new List<Position>{
                 new Position(0,0),
                 new Position(0,-1),
@@ -50,6 +52,7 @@ namespace Tetris
             : base()
         {
             this.gFrame = gf;
+            this.shape = BoxShape.I;
             List<Position> lp = new List<Position>{
                 new Position(0,0),
                 new Position(1,0),
@@ -68,6 +71,7 @@ namespace Tetris
             : base()
         {
             this.gFrame = gf;
+            this.shape = BoxShape.Z;
             List<Position> lp = new List<Position>{
                 new Position(0,0),
                 new Position(0,1),
@@ -86,6 +90,7 @@ namespace Tetris
             : base()
         {
             this.gFrame = gf;
+            this.shape = BoxShape.S;
             List<Position> lp = new List<Position>{
                 new Position(0,0),
                 new Position(0,-1),
@@ -104,6 +109,7 @@ namespace Tetris
             : base()
         {
             this.gFrame = gf;
+            this.shape = BoxShape.O;
             List<Position> lp = new List<Position>{
                 new Position(0,0),
                 new Position(0,1),
@@ -122,6 +128,7 @@ namespace Tetris
             : base()
         {
             this.gFrame = gf;
+            this.shape = BoxShape.T;
             List<Position> lp = new List<Position>{
                 new Position(0,0),
                 new Position(0,1),
