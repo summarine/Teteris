@@ -11,134 +11,100 @@ namespace Tetris
     }
     class L_Box : Box
     {
-        public L_Box(GameFrame gf) : base()
+        public L_Box(GameFrame gf) 
+            : base(gf)
         {
-            this.gFrame = gf;
             this.shape = BoxShape.L;
-            List<Position> lp = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(-2,0)
+            entity = new List<Square>{
+                new Square(new Position(0,0), 1),
+                new Square(new Position(0,1), 1),
+                new Square(new Position(-1,0), 1),
+                new Square(new Position(-2,0), 1),
             };
-            for (int i=0;i<4;i++)
-            {
-                entity.Add(new Square(lp[i], 1));
-            }
         }
     }
     class J_Box : Box
     {
         public J_Box(GameFrame gf)
-            : base()
+            : base(gf)
         {
-            this.gFrame = gf;
             this.shape = BoxShape.J;
-            List<Position> lp = new List<Position>{
-                new Position(0,0),
-                new Position(0,-1),
-                new Position(-1,0),
-                new Position(-2,0)
+            entity = new List<Square>{
+                new Square(new Position(0,0), 1),
+                new Square(new Position(0,-1), 1),
+                new Square(new Position(-1,0), 1),
+                new Square(new Position(-2,0), 1),
             };
-            for (int i = 0; i < 4; i++)
-            {
-                entity.Add(new Square(lp[i], 1));
-            }
         }
     }
     class I_Box : Box
     {
         public I_Box(GameFrame gf)
-            : base()
+            : base(gf)
         {
-            this.gFrame = gf;
             this.shape = BoxShape.I;
-            List<Position> lp = new List<Position>{
-                new Position(0,0),
-                new Position(1,0),
-                new Position(-1,0),
-                new Position(-2,0)
+            entity = new List<Square>{
+                new Square(new Position(0,0), 1),
+                new Square(new Position(1,0), 1),
+                new Square(new Position(-1,0), 1),
+                new Square(new Position(-2,0), 1),
             };
-            for (int i = 0; i < 4; i++)
-            {
-                entity.Add(new Square(lp[i], 1));
-            }
         }
     }
     class Z_Box : Box
     {
         public Z_Box(GameFrame gf)
-            : base()
+            : base(gf)
         {
-            this.gFrame = gf;
             this.shape = BoxShape.Z;
-            List<Position> lp = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(-1,-1)
+            entity = new List<Square>{
+                new Square(new Position(0,0), 1),
+                new Square(new Position(0,1), 1),
+                new Square(new Position(-1,0), 1),
+                new Square(new Position(-1,-1), 1),
             };
-            for (int i = 0; i < 4; i++)
-            {
-                entity.Add(new Square(lp[i], 1));
-            }
         }
     }
     class S_Box : Box
     {
         public S_Box(GameFrame gf)
-            : base()
+            : base(gf)
         {
-            this.gFrame = gf;
             this.shape = BoxShape.S;
-            List<Position> lp = new List<Position>{
-                new Position(0,0),
-                new Position(0,-1),
-                new Position(-1,0),
-                new Position(-1,1)
+            entity = new List<Square>{
+                new Square(new Position(0,0), 1),
+                new Square(new Position(0,-1), 1),
+                new Square(new Position(-1,0), 1),
+                new Square(new Position(-1,1), 1),
             };
-            for (int i = 0; i < 4; i++)
-            {
-                entity.Add(new Square(lp[i], 1));
-            }
         }
     }
     class O_Box : Box
     {
         public O_Box(GameFrame gf)
-            : base()
+            : base(gf)
         {
-            this.gFrame = gf;
             this.shape = BoxShape.O;
-            List<Position> lp = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(-1,1)
+            entity = new List<Square>{
+                new Square(new Position(0,0), 1),
+                new Square(new Position(0,1), 1),
+                new Square(new Position(-1,0), 1),
+                new Square(new Position(-1,1), 1),
             };
-            for (int i = 0; i < 4; i++)
-            {
-                entity.Add(new Square(lp[i], 1));
-            }
         }
     }
     class T_Box : Box
     {
         public T_Box(GameFrame gf)
-            : base()
+            : base(gf)
         {
-            this.gFrame = gf;
             this.shape = BoxShape.T;
-            List<Position> lp = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(0,-1)
+            entity = new List<Square>{
+                new Square(new Position(0,0), 1),
+                new Square(new Position(0,1), 1),
+                new Square(new Position(-1,0), 1),
+                new Square(new Position(0,-1), 1),
             };
-            for (int i = 0; i < 4; i++)
-            {
-                entity.Add(new Square(lp[i], 1));
-            }
         }
     }
 }

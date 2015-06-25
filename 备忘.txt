@@ -1,0 +1,14 @@
+已做
+增加GridData类用来绑定UI上的Grid中的Label标签
+增加Contener类用来放置map[][]
+将Box_Timer从GameFrame中移至Box类中
+
+
+正在做
+优化Box的change函数
+优化按S后timer的下一次tick出现时间
+
+
+要做
+增加正在移动的方块的投影
+增加浏览窗类

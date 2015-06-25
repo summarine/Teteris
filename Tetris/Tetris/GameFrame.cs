@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace Tetris
 {
@@ -19,30 +20,32 @@ namespace Tetris
             this.column = column;
             isPlaying = false;
 
-            for (int i = 0; i < row; i++)
+            for (int i = 0; i < column; i++)
             {
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
-            for (int i = 0; i < column; i++)
+            for (int i = 0; i < row; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
             }
 
-            map = new int[row][];
-            for (int i = 0; i < row; i++)
-                map[i] = new int[column];
-
             container = new Container(row,column);
-
+            
             for (int i = 0; i < row; i++) 
             {
                 for (int j = 0; j < column; j++) 
                 {
-                    container.map[i,j].La
+                    Label lbl = new Label();
+                    container.map[i, j] = new GridData();
+                    container.map[i, j].Lbl = lbl;
+                    container.map[i, j].Value = 0;
+                    lbl.SetValue(Grid.RowProperty, i);
+                    lbl.SetValue(Grid.ColumnProperty, j);
+                    grid.Children.Add(lbl);
                 }
             }
 
-                ClearMap();
+            ClearMap();
 
         }
 
@@ -73,12 +76,12 @@ namespace Tetris
             }
         }
 
-        private void ClearMap()
+        private void ClearMap(int v=0)
         {
             for (int i = 0; i < row; i++)
                 for (int j = 0; j < column; j++)
                 {
-                    map[i][j] = 0;
+                    container.map[i,j].Value = v;
                 }
         }
 
@@ -86,7 +89,7 @@ namespace Tetris
         {
             if (x >= row || x < 0 || y >= column || y < 0)
                 return false;
-            if (map[x][y]==0)
+            if (container.map[x,y].Value==0)
             {
                 return true;
             }
@@ -104,7 +107,10 @@ namespace Tetris
             readyBox = BoxFactory.GetNewBasicBox(this);
 
             isPlaying = true;
-            activeBox.Act();
+            if (!activeBox.Act())
+            {
+                GameOver();
+            }
             
         }
 
@@ -123,12 +129,14 @@ namespace Tetris
         public void Stop()
         {
             isPlaying = false;
+            activeBox.Stop();
             activeBox = null;
             readyBox = null;
         }
 
         public void GameOver()
         {
+            ClearMap(1);
             Stop();
             //score.??
         }
@@ -136,14 +144,23 @@ namespace Tetris
         private void CleanLines(List<int> list)
         {
             int r = list.Count();
-            for (int i=0;i<r;i++)
+            int i, j, k, l, t=r;
+            for (i = 0; i < r; i++)
             {
-                for (int j=0;j<column;j++)
+                l = list[i];
+                for (k = l; k >= 1; k--)
                 {
-                    if (list[i] - r >= 0)
-                        map[i][j] = map[i - r][j];
-                    else
-                        map[i][j] = 0;
+                    for (j = 0; j < column; j++)
+                    {
+                        container.map[k, j].Value = container.map[k - 1, j].Value;
+                    }
+                }
+                for (; k >= 0; k--)
+                {
+                    for (j = 0; j < column; j++)
+                    {
+                        container.map[k, j].Value = 0;
+                    }
                 }
             }
         }
@@ -154,7 +171,7 @@ namespace Tetris
             for (int i=0;i<row;i++)
             {
                 int j = 0;
-                while (j < column && map[i][j] != 0)
+                while (j < column && container.map[i, j].Value != 0)
                     j++;
                 if (j==column)
                 {
@@ -174,11 +191,21 @@ namespace Tetris
             //更新使用的方块
             activeBox = readyBox;
             readyBox = null;
-            if (!activeBox.Act())
+
+            bool bOK = true;
+
+            if (activeBox != null) 
+                bOK = activeBox.Act();
+            else bOK=false;
+
+            if (bOK)
+            {
+                readyBox = BoxFactory.GetNewBasicBox(this);
+            }
+            else
             {
                 GameOver();
             }
-            readyBox = new Box();
         }
 
         public void MapChanged(Object sender,MoveEventArgs e)
@@ -189,26 +216,27 @@ namespace Tetris
 
         private void UpdateGrid(List<Square> list)
         {
+            if (list == null) return;
             Position p;
             for (int i = 0; i < list.Count; i++)
             {
                 p = list[i].pos;
-                map[p.x][p.y] = list[i].value;
+                container.map[p.x,p.y].Value = list[i].value;
             }
         }
 
         private void ClearGrid(List<Square> list)
         {
+            if (list == null) return;
             Position p;
             for (int i=0;i<list.Count;i++)
             {
                 p=list[i].pos;
-                map[p.x][p.y] = 0;
+                container.map[p.x, p.y].Value = 0;
             }
         }
 
         public Container container;
-        private int[][] map;
         public int boxDropInterval;
         public Box activeBox;
         public Box readyBox;

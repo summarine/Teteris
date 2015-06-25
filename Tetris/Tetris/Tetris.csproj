@@ -67,6 +67,7 @@
     <Compile Include="Box.cs" />
     <Compile Include="BoxFactory.cs" />
     <Compile Include="ConcreteBox.cs" />
+    <Compile Include="Container.cs" />
     <Compile Include="GameFrame.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -74,6 +75,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PreviewWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -25,8 +25,8 @@ namespace Tetris
         {
             InitializeComponent();
            
-            game = new GameFrame(gameGrid,10,15);
-
+            game = new GameFrame(gameGrid,15,10);
+            
             gameGrid.ShowGridLines = true;
         }
         
