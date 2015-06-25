@@ -6,14 +6,35 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    class ConcreteBox
-    {
-    }
     class L_Box : Box
     {
-        public L_Box(GameFrame gf) 
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(-1,0),new Position(-2,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(0,1),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-2,0),new Position(-2,-1)
+            },
+            new List<Position>()
+            {
+                new Position(0,-1),new Position(-1,-1),new Position(-1,0),new Position(-1,1)
+            }
+        };
+        protected override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
+        public L_Box(GameFrame gf)
             : base(gf)
         {
+            state = 0;
             this.shape = BoxShape.L;
             entity = new List<Square>{
                 new Square(new Position(0,0), 1),
@@ -25,6 +46,29 @@ namespace Tetris
     }
     class J_Box : Box
     {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(-1,0),new Position(-2,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,1),new Position(-1,-1),new Position(-1,0),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-2,0),new Position(-2,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(0,-1),new Position(-1,-1)
+            }
+        };
+        protected override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
         public J_Box(GameFrame gf)
             : base(gf)
         {
@@ -39,6 +83,21 @@ namespace Tetris
     }
     class I_Box : Box
     {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-2,0),new Position(-3,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(0,-1),new Position(0,-2)
+            }
+        };
+        protected override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
         public I_Box(GameFrame gf)
             : base(gf)
         {
@@ -53,6 +112,21 @@ namespace Tetris
     }
     class Z_Box : Box
     {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(-1,0),new Position(-1,-1)
+            },
+            new List<Position>()
+            {
+                new Position(0,-1),new Position(-1,-1),new Position(-1,0),new Position(-2,0)
+            }
+        };
+        protected override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
         public Z_Box(GameFrame gf)
             : base(gf)
         {
@@ -67,6 +141,21 @@ namespace Tetris
     }
     class S_Box : Box
     {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(-1,0),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,1),new Position(-1,0),new Position(-1,1),new Position(-2,0)
+            }
+        };
+        protected override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
         public S_Box(GameFrame gf)
             : base(gf)
         {
@@ -81,6 +170,17 @@ namespace Tetris
     }
     class O_Box : Box
     {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(-1,0),new Position(-1,-1)
+            }
+        };
+        protected override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
         public O_Box(GameFrame gf)
             : base(gf)
         {
@@ -92,9 +192,36 @@ namespace Tetris
                 new Square(new Position(-1,1), 1),
             };
         }
+        public override bool Change()
+        {
+            return false;
+        }
     }
     class T_Box : Box
     {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(-1,0),new Position(0,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-1,-1),new Position(-2,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-1,-1),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-1,1),new Position(-2,0)
+            }
+        };
+        protected override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
         public T_Box(GameFrame gf)
             : base(gf)
         {

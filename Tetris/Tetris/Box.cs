@@ -61,20 +61,21 @@ namespace Tetris
         public bool Act()
         {
             //生成
-            pos = new Position(2,gFrame.Column/2);
+            center = new Position(2,gFrame.Column/2);
 
             for (int i = 0;i<4;i++)
             {
-                entity[i].pos.x += pos.x;
-                entity[i].pos.y += pos.y;
+                entity[i].pos.x += center.x;
+                entity[i].pos.y += center.y;
                 if (!gFrame.UnitAvilible(entity[i].pos.x, entity[i].pos.y))
                     return false;
             }
             //生成成功
-            //move(this,new MoveEventArgs(null,entity));
             
             onBottom += gFrame.ActiveBoxCrush;
             move += gFrame.MapChanged;
+
+            move(this,new MoveEventArgs(null,entity));
             timer1.Start();
             isActive = true;
             return true;
@@ -96,28 +97,42 @@ namespace Tetris
             isActive = true;
         }
 
-        public bool Change()
+        protected virtual List<List<Position>> Shapes()
         {
-            List<Square> temp = new List<Square>();
-            temp.Add(entity[0]);
-            int tx, ty, t;
-            for (int i = 1; i < 4; i++)
-            {
-                tx = entity[i].pos.x - entity[0].pos.x;
-                ty = entity[i].pos.y - entity[0].pos.y;
-                t = tx;
-                tx = -ty;
-                ty = t;
-                tx += entity[0].pos.x;
-                ty += entity[0].pos.y;
+            return null;
+        }
 
-                if (gFrame.UnitAvilible(tx, ty) || UnitInBox(tx,ty,entity))
-                    temp.Add(new Square(new Position(tx, ty), 1));
+        public virtual bool Change()
+        {
+            state++;
+            if (state == Shapes().Count) state = 0;
+            bool b = true;
+            List<Square> temp = new List<Square>();
+            int tx, ty;
+            for (int i = 0; i < 4; i++)
+            {
+                tx = center.x + Shapes()[state][i].x;
+                ty = center.y + Shapes()[state][i].y;
+                if (gFrame.UnitAvilible(tx, ty) || UnitInBox(tx, ty, entity))
+                {
+                    temp.Add(new Square(new Position(tx, ty), entity[i].value));
+                }
                 else
-                    return false;
+                {
+                    b = false;
+                    break;
+                }
             }
-            move(this,new MoveEventArgs(entity, temp));
-            entity = temp;
+            if (!b)
+            {
+                state--;
+                if (state < 0) state = Shapes().Count - 1;
+            }
+            else
+            {
+                move(this, new MoveEventArgs(entity, temp));
+                entity = temp;
+            }
             return true;
         }
         public bool MoveRight()
@@ -132,7 +147,7 @@ namespace Tetris
         {
             return TryMove(1, 0);
         }
-        private bool UnitInBox(int x,int y,List<Square> list)
+        protected bool UnitInBox(int x,int y,List<Square> list)
         {
             bool b=false;
             for (int i=0;i<list.Count;i++)
@@ -160,6 +175,7 @@ namespace Tetris
             }
             mi--;
             TryMove(mi, 0);
+            
         }
         protected bool TryMove(int dx,int dy)
         {
@@ -188,20 +204,26 @@ namespace Tetris
             move(this, new MoveEventArgs(entity,temp));
             entity = temp;
 
+            center.x += dx;
+            center.y += dy;
             return true;
         }
 
         protected DispatcherTimer timer1;
+        protected Position center;
         protected GameFrame gFrame;//隶属框架
-        protected Position pos;//表示第一个方块的位置
         protected List<Square> entity;//记录整个Box所有方块的相对位置
         public BoxShape shape;
+        protected int state;
         public bool isActive;
 
 
 
     }
 
+    /// <summary>
+    /// 坐标 : x行,y列
+    /// </summary>
     public class Position
     {
         public Position(int x,int y)

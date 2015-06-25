@@ -8,13 +8,13 @@
         Title="MainWindow" Height="800" Width="600" KeyDown="Window_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100*"/>
-            <RowDefinition Height="600*"/>
-            <RowDefinition Height="100*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="760*"/>
+            <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="400*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="440*"/>
             <ColumnDefinition Width="150*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="1" Grid.Row="1" x:Name="gameGrid" Background="Aqua">

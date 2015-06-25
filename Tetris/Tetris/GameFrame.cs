@@ -143,6 +143,7 @@ namespace Tetris
 
         private void CleanLines(List<int> list)
         {
+            //朴素实现，有空来优化
             int r = list.Count();
             int i, j, k, l, t=r;
             for (i = 0; i < r; i++)
@@ -168,7 +169,9 @@ namespace Tetris
         private int CheckFullLines()
         {
             List<int> cl = new List<int>();
-            for (int i=0;i<row;i++)
+            //保证cl中的行从下到上
+            //从第三行开始算
+            for (int i=row-1;i>2;i--)
             {
                 int j = 0;
                 while (j < column && container.map[i, j].Value != 0)
@@ -178,7 +181,8 @@ namespace Tetris
                     cl.Add(i);
                 }
             }
-            CleanLines(cl);
+            if (cl.Count!=0)
+                CleanLines(cl);
             return cl.Count();
         }
 
