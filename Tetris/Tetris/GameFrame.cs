@@ -14,7 +14,6 @@ namespace Tetris
         public GameFrame(Grid grid,int row,int column)
         {
             boxDropInterval = 500;
-            box_Timer = new DispatcherTimer();
             this.grid = grid;
             this.row = row;
             this.column = column;
@@ -33,13 +32,25 @@ namespace Tetris
             for (int i = 0; i < row; i++)
                 map[i] = new int[column];
 
-            ClearMap();
+            container = new Container(row,column);
+
+            for (int i = 0; i < row; i++) 
+            {
+                for (int j = 0; j < column; j++) 
+                {
+                    container.map[i,j].La
+                }
+            }
+
+                ClearMap();
 
         }
 
         private readonly Grid grid;
         private readonly int row;
         private readonly int column;
+
+        public int Column { get { return column; } }
 
         internal void KeyDown(KeyEventArgs e)
         {
@@ -93,38 +104,81 @@ namespace Tetris
             readyBox = BoxFactory.GetNewBasicBox(this);
 
             isPlaying = true;
-
-            box_Timer.Interval = new TimeSpan(boxDropInterval);
-            box_Timer.Tick += new EventHandler(BoxTimerTick);
-            box_Timer.Start();
+            activeBox.Act();
             
         }
 
         public void Pause()
         {
-            box_Timer.Stop();
+            activeBox.Pause();
             isPlaying = false;
         }
 
         public void Continue()
         {
-            box_Timer.Start();
+            activeBox.Continue();
             isPlaying = true;
         }
 
         public void Stop()
         {
             isPlaying = false;
-            box_Timer = null;
+            activeBox = null;
+            readyBox = null;
         }
 
-        public void BoxTimerTick(Object sender,EventArgs e)
+        public void GameOver()
         {
-            if (!activeBox.MoveDown())
+            Stop();
+            //score.??
+        }
+
+        private void CleanLines(List<int> list)
+        {
+            int r = list.Count();
+            for (int i=0;i<r;i++)
             {
-                activeBox = readyBox;
-                readyBox = new Box();
+                for (int j=0;j<column;j++)
+                {
+                    if (list[i] - r >= 0)
+                        map[i][j] = map[i - r][j];
+                    else
+                        map[i][j] = 0;
+                }
             }
+        }
+
+        private int CheckFullLines()
+        {
+            List<int> cl = new List<int>();
+            for (int i=0;i<row;i++)
+            {
+                int j = 0;
+                while (j < column && map[i][j] != 0)
+                    j++;
+                if (j==column)
+                {
+                    cl.Add(i);
+                }
+            }
+            CleanLines(cl);
+            return cl.Count();
+        }
+
+        public void ActiveBoxCrush(Object sender,EventArgs e)
+        {
+            //当前方块掉落到底部
+                //消行
+            int l = CheckFullLines();
+
+            //更新使用的方块
+            activeBox = readyBox;
+            readyBox = null;
+            if (!activeBox.Act())
+            {
+                GameOver();
+            }
+            readyBox = new Box();
         }
 
         public void MapChanged(Object sender,MoveEventArgs e)
@@ -153,11 +207,13 @@ namespace Tetris
             }
         }
 
-        public int[][] map;
+        public Container container;
+        private int[][] map;
         public int boxDropInterval;
         public Box activeBox;
         public Box readyBox;
-        private DispatcherTimer box_Timer;
+        public bool IsPlaying { get { return isPlaying; } }
         private bool isPlaying;
+
     }
 }

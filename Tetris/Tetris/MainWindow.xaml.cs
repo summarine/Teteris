@@ -38,5 +38,18 @@ namespace Tetris
             }
         }
 
+        private void StartBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (game.IsPlaying)
+            {
+                MessageBox.Show(this, "已启动游戏");
+            }
+            else
+            {
+                game.Start();
+            }
+        }
+
+        
     }
 }

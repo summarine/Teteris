@@ -18,7 +18,8 @@
             <ColumnDefinition Width="150*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="1" Grid.Row="1" x:Name="gameGrid" Background="Aqua">
-            
+
         </Grid>
+        <Button Content="开始" Grid.Column="2" HorizontalAlignment="Left" Margin="25,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="40" Click="StartBtn_Click"/>
     </Grid>
 </Window>

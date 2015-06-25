@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Tetris
 {
@@ -32,14 +33,48 @@ namespace Tetris
         }
 
         public event MoveEventHandle move;
+        public event EventHandler onBottom;
 
         public Box()
         {
+            timer1 = new DispatcherTimer();
+            timer1.Interval = new TimeSpan(gFrame.boxDropInterval);
+            timer1.Tick += timer1_Tick;
+            move += gFrame.MapChanged;
+            onBottom += gFrame.ActiveBoxCrush;
 
         }
-        public Box(GameFrame gf)
+
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            this.gFrame = gf;
+            if (!MoveDown())
+            {
+                onBottom(this, null);
+            }
+        }
+        public bool Act()
+        {
+            //生成
+            pos = new Position(0,gFrame.Column/2);
+            for (int i = 0;i<4;i++)
+            {
+                entity[i].pos.x += pos.x;
+                entity[i].pos.y += pos.y;
+                if (!gFrame.UnitAvilible(entity[i].pos.x, entity[i].pos.y))
+                    return false;
+            }
+            //生成成功
+            move(this,new MoveEventArgs(null,entity));
+            timer1.Start();
+            return true;
+        }
+        public void Pause()
+        {
+            timer1.Stop();
+        }
+        public void Continue()
+        {
+            timer1.Start();
         }
 
         public bool Change()
@@ -113,11 +148,13 @@ namespace Tetris
             return true;
         }
 
+        protected DispatcherTimer timer1;
         protected GameFrame gFrame;//隶属框架
         protected Position pos;//表示第一个方块的位置
         protected int state;//表示当前是形态多少号
         protected List<Square> entity;//记录整个Box所有方块的相对位置
         public BoxShape shape;
+
 
     }
 
