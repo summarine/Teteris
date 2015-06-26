@@ -65,6 +65,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Box.cs" />
+    <Compile Include="BoxEventArgs.cs" />
     <Compile Include="BoxFactory.cs" />
     <Compile Include="ConcreteBox.cs" />
     <Compile Include="Container.cs" />

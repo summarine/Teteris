@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace Tetris
 {
-    class Container
+    public class Container
     {
         public Container(int r,int c)
         {
@@ -23,7 +23,7 @@ namespace Tetris
         }
     }
 
-    class GridData
+    public class GridData
     {
         public Label Lbl
         {

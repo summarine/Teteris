@@ -20,6 +20,7 @@
         <Grid Grid.Column="1" Grid.Row="1" x:Name="gameGrid" Background="Aqua">
 
         </Grid>
-        <Button Content="开始" Grid.Column="2" HorizontalAlignment="Left" Margin="25,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="40" Click="StartBtn_Click"/>
+        <Button Content="开始" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="40" Click="StartBtn_Click"/>
+        <Image x:Name="PreviewImage" Grid.Column="2" HorizontalAlignment="right" Height="100" Grid.Row="1" VerticalAlignment="Top" Width="100" Margin="0,40,24,0"/>
     </Grid>
 </Window>

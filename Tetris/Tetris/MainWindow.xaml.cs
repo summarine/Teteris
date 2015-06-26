@@ -21,6 +21,7 @@ namespace Tetris
     public partial class MainWindow : Window
     {
         GameFrame game;
+        PreviewWindow preview;
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +29,8 @@ namespace Tetris
             game = new GameFrame(gameGrid,19,11);
             
             gameGrid.ShowGridLines = true;
+
+            preview = new PreviewWindow(game, PreviewImage);
         }
         
         private void Window_KeyDown(Object sender,KeyEventArgs e)

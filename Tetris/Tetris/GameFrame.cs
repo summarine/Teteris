@@ -10,9 +10,10 @@ using System.Windows.Media;
 
 namespace Tetris
 {
-    class GameFrame
+    public class GameFrame
     {
-        public GameFrame(Grid grid,int row,int column)
+        public BoxEventHandle newReadyBox;
+        public GameFrame(Grid grid, int row, int column)
         {
             boxDropInterval = 500;
             this.grid = grid;
@@ -29,11 +30,11 @@ namespace Tetris
                 grid.RowDefinitions.Add(new RowDefinition());
             }
 
-            container = new Container(row,column);
-            
-            for (int i = 0; i < row; i++) 
+            container = new Container(row, column);
+
+            for (int i = 0; i < row; i++)
             {
-                for (int j = 0; j < column; j++) 
+                for (int j = 0; j < column; j++)
                 {
                     Label lbl = new Label();
                     container.map[i, j] = new GridData();
@@ -49,9 +50,6 @@ namespace Tetris
 
         }
 
-        private readonly Grid grid;
-        private readonly int row;
-        private readonly int column;
 
         public int Column { get { return column; } }
 
@@ -76,20 +74,20 @@ namespace Tetris
             }
         }
 
-        private void ClearMap(int v=0)
+        private void ClearMap(int v = 0)
         {
             for (int i = 0; i < row; i++)
                 for (int j = 0; j < column; j++)
                 {
-                    container.map[i,j].Value = v;
+                    container.map[i, j].Value = v;
                 }
         }
 
-        public bool UnitAvilible(int x,int y)
+        public bool UnitAvilible(int x, int y)
         {
             if (x >= row || x < 0 || y >= column || y < 0)
                 return false;
-            if (container.map[x,y].Value==0)
+            if (container.map[x, y].Value == 0)
             {
                 return true;
             }
@@ -105,25 +103,27 @@ namespace Tetris
 
             activeBox = BoxFactory.GetNewBasicBox(this);
             readyBox = BoxFactory.GetNewBasicBox(this);
+            if (newReadyBox != null)
+            {
+                newReadyBox(this, new BoxEventArgs(readyBox.shape));
+            }
 
             isPlaying = true;
             if (!activeBox.Act())
             {
                 GameOver();
             }
-            
+
         }
 
         public void Pause()
         {
             activeBox.Pause();
-            isPlaying = false;
         }
 
         public void Continue()
         {
             activeBox.Continue();
-            isPlaying = true;
         }
 
         public void Stop()
@@ -132,6 +132,10 @@ namespace Tetris
             activeBox.Stop();
             activeBox = null;
             readyBox = null;
+            if (newReadyBox != null)
+            {
+                newReadyBox(this, new BoxEventArgs(readyBox.shape));
+            }
         }
 
         public void GameOver()
@@ -145,7 +149,7 @@ namespace Tetris
         {
             //朴素实现，有空来优化
             int r = list.Count();
-            int i, j, k, l, t=r;
+            int i, j, k, l, t = r;
             for (i = 0; i < r; i++)
             {
                 l = list[i];
@@ -171,25 +175,25 @@ namespace Tetris
             List<int> cl = new List<int>();
             //保证cl中的行从下到上
             //从第三行开始算
-            for (int i=row-1;i>2;i--)
+            for (int i = row - 1; i > 2; i--)
             {
                 int j = 0;
                 while (j < column && container.map[i, j].Value != 0)
                     j++;
-                if (j==column)
+                if (j == column)
                 {
                     cl.Add(i);
                 }
             }
-            if (cl.Count!=0)
+            if (cl.Count != 0)
                 CleanLines(cl);
             return cl.Count();
         }
 
-        public void ActiveBoxCrush(Object sender,EventArgs e)
+        public void ActiveBoxCrush(Object sender, EventArgs e)
         {
             //当前方块掉落到底部
-                //消行
+            //消行
             int l = CheckFullLines();
 
             //更新使用的方块
@@ -198,13 +202,17 @@ namespace Tetris
 
             bool bOK = true;
 
-            if (activeBox != null) 
+            if (activeBox != null)
                 bOK = activeBox.Act();
-            else bOK=false;
+            else bOK = false;
 
             if (bOK)
             {
                 readyBox = BoxFactory.GetNewBasicBox(this);
+                if (newReadyBox != null)
+                {
+                    newReadyBox(this, new BoxEventArgs(readyBox.shape));
+                }
             }
             else
             {
@@ -212,7 +220,7 @@ namespace Tetris
             }
         }
 
-        public void MapChanged(Object sender,MoveEventArgs e)
+        public void MapChanged(Object sender, MoveEventArgs e)
         {
             ClearGrid(e.period);
             UpdateGrid(e.next);
@@ -225,7 +233,7 @@ namespace Tetris
             for (int i = 0; i < list.Count; i++)
             {
                 p = list[i].pos;
-                container.map[p.x,p.y].Value = list[i].value;
+                container.map[p.x, p.y].Value = list[i].value;
             }
         }
 
@@ -233,9 +241,9 @@ namespace Tetris
         {
             if (list == null) return;
             Position p;
-            for (int i=0;i<list.Count;i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                p=list[i].pos;
+                p = list[i].pos;
                 container.map[p.x, p.y].Value = 0;
             }
         }
@@ -245,7 +253,10 @@ namespace Tetris
         public Box activeBox;
         public Box readyBox;
         public bool IsPlaying { get { return isPlaying; } }
+        
         private bool isPlaying;
-
+        private readonly Grid grid;
+        private readonly int row;
+        private readonly int column;
     }
 }

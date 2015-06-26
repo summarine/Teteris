@@ -7,6 +7,10 @@ using System.Windows.Threading;
 
 namespace Tetris
 {
+    public enum BoxShape
+    {
+        Z, S, T, I, O, L, J
+    }
     public class MoveEventArgs : EventArgs
     {
         public List<Square> period;
@@ -25,13 +29,8 @@ namespace Tetris
     /// <summary>
     /// 一次次掉下的方块
     /// </summary>
-    class Box
+    public class Box
     {
-        public enum BoxShape
-        {
-            Z,S,T,I,O,L,J
-        }
-
         public event MoveEventHandle move;
         public event EventHandler onBottom;
 

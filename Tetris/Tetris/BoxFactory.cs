@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    class BoxFactory
+    public class BoxFactory
     {
         static public Box GetNewBasicBox(GameFrame gf)
         {

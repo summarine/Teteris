@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    class L_Box : Box
+    public class L_Box : Box
     {
         static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
@@ -44,7 +44,7 @@ namespace Tetris
             };
         }
     }
-    class J_Box : Box
+    public class J_Box : Box
     {
         static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
@@ -81,7 +81,7 @@ namespace Tetris
             };
         }
     }
-    class I_Box : Box
+    public class I_Box : Box
     {
         static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
@@ -110,7 +110,7 @@ namespace Tetris
             };
         }
     }
-    class Z_Box : Box
+    public class Z_Box : Box
     {
         static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
@@ -139,7 +139,7 @@ namespace Tetris
             };
         }
     }
-    class S_Box : Box
+    public class S_Box : Box
     {
         static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
@@ -168,7 +168,7 @@ namespace Tetris
             };
         }
     }
-    class O_Box : Box
+    public class O_Box : Box
     {
         static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
@@ -197,7 +197,7 @@ namespace Tetris
             return false;
         }
     }
-    class T_Box : Box
+    public class T_Box : Box
     {
         static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
