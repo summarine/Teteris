@@ -7,24 +7,6 @@ using System.Windows.Threading;
 
 namespace Tetris
 {
-    public enum BoxShape
-    {
-        Z, S, T, I, O, L, J
-    }
-    public class MoveEventArgs : EventArgs
-    {
-        public List<Square> period;
-        public List<Square> next;
-
-        public MoveEventArgs(List<Square> a, List<Square> b)
-        {
-            // TODO: Complete member initialization
-            this.period = a;
-            this.next = b;
-        }
-
-    }
-    public delegate void MoveEventHandle(Object sender, MoveEventArgs e);
     
     /// <summary>
     /// 一次次掉下的方块
@@ -39,7 +21,7 @@ namespace Tetris
             this.gFrame = gf;
 
             timer1 = new DispatcherTimer();
-            timer1.Interval = new TimeSpan(6000000);//gFrame.boxDropInterval);
+            timer1.Interval = new TimeSpan((int)gFrame.Hard);//gFrame.boxDropInterval);
             timer1.Tick += timer1_Tick;
 
             isActive = false;
@@ -198,7 +180,7 @@ namespace Tetris
             List<Square> temp = new List<Square>();
             for (int i=0;i<entity.Count;i++)
             {
-                temp.Add(new Square(new Position(entity[i].pos.x+dx, entity[i].pos.y+dy), 1));
+                temp.Add(new Square(new Position(entity[i].pos.x+dx, entity[i].pos.y+dy), shape));
             }
             move(this, new MoveEventArgs(entity,temp));
             entity = temp;
@@ -220,31 +202,15 @@ namespace Tetris
 
     }
 
-    /// <summary>
-    /// 坐标 : x行,y列
-    /// </summary>
-    public class Position
-    {
-        public Position(int x,int y)
-        {
-            this.x=x;
-            this.y=y;
-        }
-        public Position()
-        {
-
-        }
-        public int x;
-        public int y;
-    }
+    
     public class Square
     {
-        public Square(Position p, int v)
+        public Square(Position p, BoxShape v)
         {
             this.pos = p;
             this.value = v;
         }
         public Position pos;//位置
-        public int value;//种类？
+        public BoxShape value;//种类
     }
 }

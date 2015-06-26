@@ -37,10 +37,10 @@ namespace Tetris
             state = 0;
             this.shape = BoxShape.L;
             entity = new List<Square>{
-                new Square(new Position(0,0), 1),
-                new Square(new Position(0,1), 1),
-                new Square(new Position(-1,0), 1),
-                new Square(new Position(-2,0), 1),
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-2,0), shape),
             };
         }
     }
@@ -74,10 +74,10 @@ namespace Tetris
         {
             this.shape = BoxShape.J;
             entity = new List<Square>{
-                new Square(new Position(0,0), 1),
-                new Square(new Position(0,-1), 1),
-                new Square(new Position(-1,0), 1),
-                new Square(new Position(-2,0), 1),
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,-1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-2,0), shape)
             };
         }
     }
@@ -103,10 +103,10 @@ namespace Tetris
         {
             this.shape = BoxShape.I;
             entity = new List<Square>{
-                new Square(new Position(0,0), 1),
-                new Square(new Position(1,0), 1),
-                new Square(new Position(-1,0), 1),
-                new Square(new Position(-2,0), 1),
+                new Square(new Position(0,0), shape),
+                new Square(new Position(1,0), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-2,0), shape),
             };
         }
     }
@@ -132,10 +132,10 @@ namespace Tetris
         {
             this.shape = BoxShape.Z;
             entity = new List<Square>{
-                new Square(new Position(0,0), 1),
-                new Square(new Position(0,1), 1),
-                new Square(new Position(-1,0), 1),
-                new Square(new Position(-1,-1), 1),
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-1,-1), shape),
             };
         }
     }
@@ -161,10 +161,10 @@ namespace Tetris
         {
             this.shape = BoxShape.S;
             entity = new List<Square>{
-                new Square(new Position(0,0), 1),
-                new Square(new Position(0,-1), 1),
-                new Square(new Position(-1,0), 1),
-                new Square(new Position(-1,1), 1),
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,-1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-1,1), shape),
             };
         }
     }
@@ -186,10 +186,10 @@ namespace Tetris
         {
             this.shape = BoxShape.O;
             entity = new List<Square>{
-                new Square(new Position(0,0), 1),
-                new Square(new Position(0,1), 1),
-                new Square(new Position(-1,0), 1),
-                new Square(new Position(-1,1), 1),
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-1,1), shape),
             };
         }
         public override bool Change()
@@ -227,10 +227,10 @@ namespace Tetris
         {
             this.shape = BoxShape.T;
             entity = new List<Square>{
-                new Square(new Position(0,0), 1),
-                new Square(new Position(0,1), 1),
-                new Square(new Position(-1,0), 1),
-                new Square(new Position(0,-1), 1),
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(0,-1), shape),
             };
         }
     }

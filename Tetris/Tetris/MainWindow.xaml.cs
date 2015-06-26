@@ -22,15 +22,18 @@ namespace Tetris
     {
         GameFrame game;
         PreviewWindow preview;
+        ScoringBoard scoreBoard;
         public MainWindow()
         {
             InitializeComponent();
            
             game = new GameFrame(gameGrid,19,11);
-            
-            gameGrid.ShowGridLines = true;
+
+            scoreBoard = new ScoringBoard(Scoring_Board);
 
             preview = new PreviewWindow(game, PreviewImage);
+
+            game.RowsCleanEvent += scoreBoard.GetScore;
         }
         
         private void Window_KeyDown(Object sender,KeyEventArgs e)
@@ -43,16 +46,54 @@ namespace Tetris
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (game.IsPlaying)
-            {
-                MessageBox.Show(this, "已启动游戏");
-            }
-            else
+            if (game.State == GameState.Stoped)
             {
                 game.Start();
             }
+            else
+            {
+                MessageBox.Show(this, "已启动游戏");
+            }
         }
 
+        private void PauseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (game.State == GameState.Active)
+            {
+                game.Pause();
+            }
+            else
+            {
+                MessageBox.Show(this, "无法暂停");
+            }
+        }
+        private void ContinueBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (game.State == GameState.Paused)
+            {
+                game.Continue();
+            }
+            else
+            {
+                MessageBox.Show(this, "无法继续");
+            }
+        }
+        private void StopBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (game.State == GameState.Active || game.State== GameState.Paused)
+            {
+                game.Stop();
+            }
+            else
+            {
+                MessageBox.Show(this, "无法停止");
+            }
+        }
+        private void QuitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            game.Stop();
+            this.Close();
+        }
         
     }
 }

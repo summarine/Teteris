@@ -12,14 +12,26 @@ namespace Tetris
 {
     public class GameFrame
     {
-        public BoxEventHandle newReadyBox;
+        /// <summary>
+        /// 当准备的方块更新时发出
+        /// </summary>
+        public event BoxEventHandle RenewReadyBox;
+        public event ScoreEventHandle RowsCleanEvent;
+        /// <summary>
+        /// 构造函数，参数为主体网格,以及行数列数
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
         public GameFrame(Grid grid, int row, int column)
         {
             boxDropInterval = 500;
             this.grid = grid;
             this.row = row;
             this.column = column;
-            isPlaying = false;
+            State = GameState.Stoped;
+
+            Hard = 1;
 
             for (int i = 0; i < column; i++)
             {
@@ -39,7 +51,7 @@ namespace Tetris
                     Label lbl = new Label();
                     container.map[i, j] = new GridData();
                     container.map[i, j].Lbl = lbl;
-                    container.map[i, j].Value = 0;
+                    container.map[i, j].Value = BoxShape.NULL;
                     lbl.SetValue(Grid.RowProperty, i);
                     lbl.SetValue(Grid.ColumnProperty, j);
                     grid.Children.Add(lbl);
@@ -50,11 +62,19 @@ namespace Tetris
 
         }
 
-
+        /// <summary>
+        /// 列属性
+        /// </summary>
         public int Column { get { return column; } }
-
-        internal void KeyDown(KeyEventArgs e)
+        /// <summary>
+        /// 键盘事件响应方法
+        /// </summary>
+        /// <param name="e"></param>
+        public void KeyDown(KeyEventArgs e)
         {
+            if (State != GameState.Active) return;
+            if (activeBox == null) return;
+
             switch (e.Key)
             {
                 case Key.W:
@@ -73,21 +93,29 @@ namespace Tetris
                     break;
             }
         }
-
-        private void ClearMap(int v = 0)
+        /// <summary>
+        /// 清空地图，默认参数为0——清空
+        /// </summary>
+        /// <param name="v"></param>
+        protected void ClearMap(int v = 0)
         {
             for (int i = 0; i < row; i++)
                 for (int j = 0; j < column; j++)
                 {
-                    container.map[i, j].Value = v;
+                    container.map[i, j].Value = (BoxShape)v;
                 }
         }
-
+        /// <summary>
+        /// 网格单元是否可用
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool UnitAvilible(int x, int y)
         {
             if (x >= row || x < 0 || y >= column || y < 0)
                 return false;
-            if (container.map[x, y].Value == 0)
+            if (container.map[x, y].Value == BoxShape.NULL)
             {
                 return true;
             }
@@ -96,63 +124,77 @@ namespace Tetris
                 return false;
             }
         }
-
+        /// <summary>
+        /// 开始工作
+        /// </summary>
         public void Start()
         {
             ClearMap();
 
             activeBox = BoxFactory.GetNewBasicBox(this);
             readyBox = BoxFactory.GetNewBasicBox(this);
-            if (newReadyBox != null)
+            if (RenewReadyBox != null)
             {
-                newReadyBox(this, new BoxEventArgs(readyBox.shape));
+                RenewReadyBox(this, new BoxEventArgs(readyBox.shape));
             }
-
-            isPlaying = true;
+            State = GameState.Active;
             if (!activeBox.Act())
             {
                 GameOver();
             }
 
         }
-
+        /// <summary>
+        /// 暂停
+        /// </summary>
         public void Pause()
         {
+            State = GameState.Paused;
             activeBox.Pause();
         }
-
+        /// <summary>
+        /// 从暂停状态开始
+        /// </summary>
         public void Continue()
         {
+            State = GameState.Active;
             activeBox.Continue();
         }
-
+        /// <summary>
+        /// 停止
+        /// </summary>
         public void Stop()
         {
-            isPlaying = false;
+            State = GameState.Stoped;
             activeBox.Stop();
             activeBox = null;
             readyBox = null;
-            if (newReadyBox != null)
+            if (RenewReadyBox != null)
             {
-                newReadyBox(this, new BoxEventArgs(readyBox.shape));
+                RenewReadyBox(this, null);
             }
         }
-
+        /// <summary>
+        /// 游戏结束
+        /// </summary>
         public void GameOver()
         {
-            ClearMap(1);
+            ClearMap(999);
             Stop();
             //score.??
         }
-
-        private void CleanLines(List<int> list)
+        /// <summary>
+        /// 清除行，并使其上方块下落
+        /// </summary>
+        /// <param name="list"></param>
+        protected void CleanLines(List<int> list)
         {
             //朴素实现，有空来优化
             int r = list.Count();
             int i, j, k, l, t = r;
             for (i = 0; i < r; i++)
             {
-                l = list[i];
+                l = list[i]+i;
                 for (k = l; k >= 1; k--)
                 {
                     for (j = 0; j < column; j++)
@@ -169,8 +211,11 @@ namespace Tetris
                 }
             }
         }
-
-        private int CheckFullLines()
+        /// <summary>
+        /// 检查放满的行
+        /// </summary>
+        /// <returns></returns>
+        protected int CheckFullLines()
         {
             List<int> cl = new List<int>();
             //保证cl中的行从下到上
@@ -178,7 +223,7 @@ namespace Tetris
             for (int i = row - 1; i > 2; i--)
             {
                 int j = 0;
-                while (j < column && container.map[i, j].Value != 0)
+                while (j < column && container.map[i, j].Value != BoxShape.NULL && container.map[i,j].Value!=BoxShape.BAN)
                     j++;
                 if (j == column)
                 {
@@ -186,10 +231,18 @@ namespace Tetris
                 }
             }
             if (cl.Count != 0)
+            {
                 CleanLines(cl);
+                if (RowsCleanEvent != null)
+                    RowsCleanEvent(this, new ScoreEventArgs(cl.Count));
+            }
             return cl.Count();
         }
-
+        /// <summary>
+        /// 当前方块下落到底部的响应方法
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ActiveBoxCrush(Object sender, EventArgs e)
         {
             //当前方块掉落到底部
@@ -209,9 +262,9 @@ namespace Tetris
             if (bOK)
             {
                 readyBox = BoxFactory.GetNewBasicBox(this);
-                if (newReadyBox != null)
+                if (RenewReadyBox != null)
                 {
-                    newReadyBox(this, new BoxEventArgs(readyBox.shape));
+                    RenewReadyBox(this, new BoxEventArgs(readyBox.shape));
                 }
             }
             else
@@ -219,14 +272,21 @@ namespace Tetris
                 GameOver();
             }
         }
-
+        /// <summary>
+        /// 活动方块位置改变响应方法
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MapChanged(Object sender, MoveEventArgs e)
         {
             ClearGrid(e.period);
             UpdateGrid(e.next);
         }
-
-        private void UpdateGrid(List<Square> list)
+        /// <summary>
+        /// 更新网格
+        /// </summary>
+        /// <param name="list"></param>
+        protected void UpdateGrid(List<Square> list)
         {
             if (list == null) return;
             Position p;
@@ -236,8 +296,11 @@ namespace Tetris
                 container.map[p.x, p.y].Value = list[i].value;
             }
         }
-
-        private void ClearGrid(List<Square> list)
+        /// <summary>
+        /// 清除网格
+        /// </summary>
+        /// <param name="list"></param>
+        protected void ClearGrid(List<Square> list)
         {
             if (list == null) return;
             Position p;
@@ -249,14 +312,36 @@ namespace Tetris
         }
 
         public Container container;
-        public int boxDropInterval;
         public Box activeBox;
         public Box readyBox;
-        public bool IsPlaying { get { return isPlaying; } }
         
-        private bool isPlaying;
-        private readonly Grid grid;
-        private readonly int row;
-        private readonly int column;
+        public GameState State 
+        { 
+            get { return state; }
+            private set
+            {
+                state = value;
+                
+            }
+        }
+        protected GameState state;
+        /// <summary>
+        /// set:输入的是每秒掉落多少格
+        /// get:输出的是掉落一格用多少毫微秒
+        /// </summary>
+        public double Hard
+        {
+            get { return boxDropInterval; }
+            set
+            {
+                double t = value;
+                t = 1e7 / t;
+                boxDropInterval = (int)t;
+            }
+        }
+        protected int boxDropInterval;
+        protected readonly Grid grid;
+        protected readonly int row;
+        protected readonly int column;
     }
 }

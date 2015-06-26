@@ -26,39 +26,18 @@ namespace Tetris
                 img.Source = null;
             }
 
-            gFrame.newReadyBox += GetNewReadyBox;
+            gFrame.RenewReadyBox += GetNewReadyBox;
         }
         private void GetNewReadyBox(object sender, BoxEventArgs e)
         {
-            string path = System.Environment.CurrentDirectory + "/Images/";
+            string path = System.Environment.CurrentDirectory + "/Images/BoxPreview_";
             if (e==null)
             {
-                path += "emptyPreview.png";
+                path += "empty.png";
             }
             else
-            switch (e.box)
             {
-                case BoxShape.I:
-                    path += "IBoxPreview.png";
-                    break;
-                case BoxShape.J:
-                    path += "JBoxPreview.png";
-                    break;
-                case BoxShape.L:
-                    path += "LBoxPreview.png";
-                    break;
-                case BoxShape.T:
-                    path += "TBoxPreview.png";
-                    break;
-                case BoxShape.S:
-                    path += "SBoxPreview.png";
-                    break;
-                case BoxShape.Z:
-                    path += "ZBoxPreview.png";
-                    break;
-                case BoxShape.O:
-                    path += "OBoxPreview.png";
-                    break;
+                path += Resources.GetUnitImgFromBoxShape(e.box);
             }
             if (File.Exists(path))
             {

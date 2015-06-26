@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Tetris
 {
@@ -36,7 +38,7 @@ namespace Tetris
                 label = value;
             }
         }
-        public int Value
+        public BoxShape Value
         {
             set
             {
@@ -51,15 +53,22 @@ namespace Tetris
             }
         }
 
-        private void Convert(int v)
+        private void Convert(BoxShape bs)
         {
-            if (v == 0)
-                label.Background = new SolidColorBrush(Colors.Aqua);
+            if (bs==BoxShape.NULL)
+                label.Background = null;
             else
-                label.Background = new SolidColorBrush(Colors.Yellow);
+            {
+                string path = System.Environment.CurrentDirectory + "/images/BoxUnit_";
+                path += Resources.GetUnitImgFromBoxShape(bs);
+                if (File.Exists(path))
+                    label.Background = new ImageBrush(new BitmapImage(new Uri(path, UriKind.Absolute)));
+                else
+                    label.Background = null;
+            }
         }
 
-        private int value;
+        private BoxShape value;
         private Label label;
     }
 }
