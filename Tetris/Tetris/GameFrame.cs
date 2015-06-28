@@ -15,8 +15,9 @@ namespace Tetris
         /// <summary>
         /// 当准备的方块更新时发出
         /// </summary>
-        public event BoxEventHandle RenewReadyBox;
+        public event BoxShapeEventHandle RenewReadyBox;
         public event ScoreEventHandle RowsCleanEvent;
+        public event BoxEventHandle ActiveBoxMoved;
         /// <summary>
         /// 构造函数，参数为主体网格,以及行数列数
         /// </summary>
@@ -30,6 +31,7 @@ namespace Tetris
             this.row = row;
             this.column = column;
             State = GameState.Stoped;
+            boxNum = 0;
 
             Hard = 1;
 
@@ -70,7 +72,7 @@ namespace Tetris
         /// 键盘事件响应方法
         /// </summary>
         /// <param name="e"></param>
-        public void KeyDown(KeyEventArgs e)
+        virtual public void KeyDown(KeyEventArgs e)
         {
             if (State != GameState.Active) return;
             if (activeBox == null) return;
@@ -92,6 +94,7 @@ namespace Tetris
                 default:
                     break;
             }
+           
         }
         /// <summary>
         /// 清空地图，默认参数为0——清空
@@ -115,7 +118,7 @@ namespace Tetris
         {
             if (x >= row || x < 0 || y >= column || y < 0)
                 return false;
-            if (container.map[x, y].Value == BoxShape.NULL)
+            if (container.map[x, y].Value == BoxShape.NULL || container.map[x,y].Value == BoxShape.SHADOW)
             {
                 return true;
             }
@@ -129,13 +132,14 @@ namespace Tetris
         /// </summary>
         public void Start()
         {
+            boxNum = 0;
             ClearMap();
 
-            activeBox = BoxFactory.GetNewBasicBox(this);
-            readyBox = BoxFactory.GetNewBasicBox(this);
+            activeBox = BoxFactory.Instance().GetNewBasicBox(this);
+            readyBox = BoxFactory.Instance().GetNewBasicBox(this);
             if (RenewReadyBox != null)
             {
-                RenewReadyBox(this, new BoxEventArgs(readyBox.shape));
+                RenewReadyBox(this, new BoxShapeEventArgs(readyBox.shape));
             }
             State = GameState.Active;
             if (!activeBox.Act())
@@ -250,6 +254,7 @@ namespace Tetris
             int l = CheckFullLines();
 
             //更新使用的方块
+            activeBox.Stop();
             activeBox = readyBox;
             readyBox = null;
 
@@ -261,10 +266,10 @@ namespace Tetris
 
             if (bOK)
             {
-                readyBox = BoxFactory.GetNewBasicBox(this);
+                readyBox = BoxFactory.Instance().GetNewBasicBox(this);
                 if (RenewReadyBox != null)
                 {
-                    RenewReadyBox(this, new BoxEventArgs(readyBox.shape));
+                    RenewReadyBox(this, new BoxShapeEventArgs(readyBox.shape));
                 }
             }
             else
@@ -281,6 +286,12 @@ namespace Tetris
         {
             ClearGrid(e.period);
             UpdateGrid(e.next);
+
+            if (sender == activeBox)
+            {
+                if (ActiveBoxMoved != null)
+                    ActiveBoxMoved(this,new BoxEventArgs(activeBox));
+            }
         }
         /// <summary>
         /// 更新网格
@@ -339,7 +350,14 @@ namespace Tetris
                 boxDropInterval = (int)t;
             }
         }
+
+        public int Row
+        {
+            get { return row; }
+        }
+
         protected int boxDropInterval;
+        protected int boxNum;
         protected readonly Grid grid;
         protected readonly int row;
         protected readonly int column;

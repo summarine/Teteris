@@ -3,36 +3,86 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.IO;
 
 namespace Tetris
 {
     public class BoxFactory
     {
-        static public Box GetNewBasicBox(GameFrame gf)
+
+        static public BoxFactory Instance()
+        {
+            if (_instance == null)
+                _instance = new BoxFactory();
+            return _instance;
+        }
+
+        private BoxFactory()
+        {
+            seed = (new Random()).Next();
+        }
+
+        public void setSeed(int s)
+        {
+            seed = s;
+        }
+
+        public Box GetNewBasicBox(GameFrame gf = null)
         {
             Box box = null;
-            Random rand = new Random();
+            Random rand = new Random(seed);
+            seed = rand.Next();
             int id = rand.Next(7);
             switch (id)
             {
-                case 0: box = new L_Box(gf);
+                case 0:
+                    box = new L_Box(gf);
                     break;
-                case 1: box = new J_Box(gf);
+                case 1:
+                    box = new J_Box(gf);
                     break;
-                case 2: box = new I_Box(gf);
+                case 2:
+                    box = new I_Box(gf);
                     break;
-                case 3: box = new Z_Box(gf);
+                case 3:
+                    box = new Z_Box(gf);
                     break;
-                case 4: box = new S_Box(gf);
+                case 4:
+                    box = new S_Box(gf);
                     break;
-                case 5: box = new O_Box(gf);
+                case 5:
+                    box = new O_Box(gf);
                     break;
-                case 6: box = new T_Box(gf);
+                case 6:
+                    box = new T_Box(gf);
                     break;
             }
             if (box == null)
                 box = new I_Box(gf);
             return box;
         }
+        private ImageBrush[] brush = new ImageBrush[20];
+        public ImageBrush GetBoxImageBrush(BoxShape bs)
+        {
+            if (bs == BoxShape.BLANK) return null;
+            if ((int)bs < 20)
+            {
+                if (brush[(int)bs] == null)
+                {
+                    string path = System.Environment.CurrentDirectory + "/images/BoxUnit_";
+                    path += Resources.GetStringfromBoxShape(bs);
+                    if (File.Exists(path))
+                        brush[(int)bs] = new ImageBrush(new BitmapImage(new Uri(path, UriKind.Absolute)));
+                }
+                return brush[(int)bs];
+            }
+            else
+                return null;
+        }
+
+        private int seed;
+        static private BoxFactory _instance;
     }
 }

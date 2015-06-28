@@ -27,7 +27,7 @@ namespace Tetris
         {
             InitializeComponent();
            
-            game = new GameFrame(gameGrid,19,11);
+            game = new MyGameFrame(gameGrid,19,11);
 
             scoreBoard = new ScoringBoard(Scoring_Board);
 

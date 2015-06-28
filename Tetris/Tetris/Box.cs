@@ -7,7 +7,7 @@ using System.Windows.Threading;
 
 namespace Tetris
 {
-    
+
     /// <summary>
     /// 一次次掉下的方块
     /// </summary>
@@ -36,15 +36,31 @@ namespace Tetris
             if (!MoveDown())
             {
                 onBottom(this, null);
-                timer1.Tick -= timer1_Tick;
+            }
+        }
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            if (!isActive)
+            {
+                return;
+            }
+            if (!MoveDown())
+            {
+                onBottom(this, null);
+            }
+            else
+            {
+                if (timer1!=null)
+                    timer1.Start();
+                timer2.Stop();
             }
         }
         public bool Act()
         {
             //生成
-            center = new Position(2,gFrame.Column/2);
+            center = new Position(2, gFrame.Column / 2);
 
-            for (int i = 0;i<4;i++)
+            for (int i = 0; i < 4; i++)
             {
                 entity[i].pos.x += center.x;
                 entity[i].pos.y += center.y;
@@ -52,11 +68,11 @@ namespace Tetris
                     return false;
             }
             //生成成功
-            
+
             onBottom += gFrame.ActiveBoxCrush;
             move += gFrame.MapChanged;
 
-            move(this,new MoveEventArgs(null,entity));
+            move(this, new MoveEventArgs(null, entity));
             timer1.Start();
             isActive = true;
             return true;
@@ -64,17 +80,27 @@ namespace Tetris
         public void Stop()
         {
             isActive = false;
-            timer1.Tick -= timer1_Tick;
-            timer1.Stop();
+            if (timer1 != null)
+            {
+                timer1.Tick -= timer1_Tick;
+                timer1.Stop();
+            }
+            if (timer2 != null)
+            {
+                timer2.Tick -= gFrame.ActiveBoxCrush;
+                timer2.Stop();
+            }
         }
         public void Pause()
         {
             isActive = false;
-            timer1.Stop();
+            if (timer1 != null)
+                timer1.Stop();
         }
         public void Continue()
         {
-            timer1.Start();
+            if (timer1 != null)
+                timer1.Start();
             isActive = true;
         }
 
@@ -94,7 +120,7 @@ namespace Tetris
             {
                 tx = center.x + Shapes()[state][i].x;
                 ty = center.y + Shapes()[state][i].y;
-                if (gFrame.UnitAvilible(tx, ty) || UnitInBox(tx, ty, entity))
+                if (gFrame.UnitAvilible(tx, ty) || UnitInBox(tx, ty))
                 {
                     temp.Add(new Square(new Position(tx, ty), entity[i].value));
                 }
@@ -111,8 +137,9 @@ namespace Tetris
             }
             else
             {
-                move(this, new MoveEventArgs(entity, temp));
-                entity = temp;
+                List<Square> sw = temp; temp = entity; entity = sw;
+                move(this, new MoveEventArgs(temp, entity));
+                //entity = temp;
             }
             return true;
         }
@@ -128,12 +155,12 @@ namespace Tetris
         {
             return TryMove(1, 0);
         }
-        protected bool UnitInBox(int x,int y,List<Square> list)
+        public bool UnitInBox(int x, int y)
         {
-            bool b=false;
-            for (int i=0;i<list.Count;i++)
+            bool b = false;
+            for (int i = 0; i < entity.Count; i++)
             {
-                if (x==list[i].pos.x && y==list[i].pos.y)
+                if (x == entity[i].pos.x && y == entity[i].pos.y)
                 {
                     b = true;
                     break;
@@ -143,12 +170,14 @@ namespace Tetris
         }
         public void FastFall()
         {
+            timer1.Stop();
+
             int mi = 100;
-            int tx,ty;
-            for (int i=0;i<4;i++)
+            int tx, ty;
+            for (int i = 0; i < 4; i++)
             {
                 tx = entity[i].pos.x; ty = entity[i].pos.y;
-                while (gFrame.UnitAvilible(tx,ty) || UnitInBox(tx,ty,entity))
+                while (gFrame.UnitAvilible(tx, ty) || UnitInBox(tx, ty))
                 {
                     tx++;
                 }
@@ -156,44 +185,50 @@ namespace Tetris
             }
             mi--;
             TryMove(mi, 0);
-            
+
+            if (timer2 == null)
+            {
+                timer2 = new DispatcherTimer();
+                timer2.Interval = new TimeSpan((long)2e6);
+                timer2.Tick += timer2_Tick;
+            }
+            timer2.Start();
         }
-        protected bool TryMove(int dx,int dy)
+
+        protected bool TryMove(int dx, int dy)
         {
 
             int tx, ty;
-            for (int i = 0; i < entity.Count;i++ )
+            for (int i = 0; i < entity.Count; i++)
             {
                 tx = entity[i].pos.x + dx;
                 ty = entity[i].pos.y + dy;
-                bool bIn = false;
-                for (int j = 0; j < 4; j++)
-                {
-                    if (entity[j].pos.x == tx && entity[j].pos.y == ty)
-                    {
-                        bIn = true; break;
-                    }
-                }
-                if (!bIn && !gFrame.UnitAvilible(tx, ty))
+                
+                if (!UnitInBox(tx,ty) && !gFrame.UnitAvilible(tx, ty))
                     return false;
             }
             List<Square> temp = new List<Square>();
-            for (int i=0;i<entity.Count;i++)
+            for (int i = 0; i < entity.Count; i++)
             {
-                temp.Add(new Square(new Position(entity[i].pos.x+dx, entity[i].pos.y+dy), shape));
+                temp.Add(new Square(new Position(entity[i].pos.x + dx, entity[i].pos.y + dy), shape));
             }
-            move(this, new MoveEventArgs(entity,temp));
-            entity = temp;
-
+            List<Square> sw = temp; temp = entity; entity = sw;
             center.x += dx;
             center.y += dy;
+            move(this, new MoveEventArgs(temp, entity));
+
             return true;
         }
 
-        protected DispatcherTimer timer1;
+        protected DispatcherTimer timer1;//匀速下落
+        protected DispatcherTimer timer2;//快速下落后销毁方块
         protected Position center;
         protected GameFrame gFrame;//隶属框架
         protected List<Square> entity;//记录整个Box所有方块的相对位置
+        public List<Square> Entity
+        {
+            get { return entity; }
+        }
         public BoxShape shape;
         protected int state;
         public bool isActive;
@@ -202,7 +237,7 @@ namespace Tetris
 
     }
 
-    
+
     public class Square
     {
         public Square(Position p, BoxShape v)

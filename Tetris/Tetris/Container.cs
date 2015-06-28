@@ -55,17 +55,7 @@ namespace Tetris
 
         private void Convert(BoxShape bs)
         {
-            if (bs==BoxShape.NULL)
-                label.Background = null;
-            else
-            {
-                string path = System.Environment.CurrentDirectory + "/images/BoxUnit_";
-                path += Resources.GetUnitImgFromBoxShape(bs);
-                if (File.Exists(path))
-                    label.Background = new ImageBrush(new BitmapImage(new Uri(path, UriKind.Absolute)));
-                else
-                    label.Background = null;
-            }
+            label.Background = BoxFactory.Instance().GetBoxImageBrush(bs);
         }
 
         private BoxShape value;

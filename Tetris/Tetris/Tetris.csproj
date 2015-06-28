@@ -65,6 +65,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Box.cs" />
+    <Compile Include="BoxShadow.cs" />
+    <Compile Include="MyGameFrame.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="Structs.cs" />

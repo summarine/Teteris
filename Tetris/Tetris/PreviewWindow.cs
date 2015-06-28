@@ -28,7 +28,7 @@ namespace Tetris
 
             gFrame.RenewReadyBox += GetNewReadyBox;
         }
-        private void GetNewReadyBox(object sender, BoxEventArgs e)
+        private void GetNewReadyBox(object sender, BoxShapeEventArgs e)
         {
             string path = System.Environment.CurrentDirectory + "/Images/BoxPreview_";
             if (e==null)
@@ -37,7 +37,7 @@ namespace Tetris
             }
             else
             {
-                path += Resources.GetUnitImgFromBoxShape(e.box);
+                path += Resources.GetStringfromBoxShape(e.box);
             }
             if (File.Exists(path))
             {

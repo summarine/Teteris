@@ -8,14 +8,25 @@ namespace Tetris
 {
     public class BoxEventArgs : EventArgs
     {
-        public BoxShape box;
+        public Box box;
 
-        public BoxEventArgs(BoxShape box)
+        public BoxEventArgs(Box box)
         {
             this.box = box;
         }
     }
-    public delegate void BoxEventHandle(Object sender,BoxEventArgs e);
+    public delegate void BoxEventHandle(Object sender, BoxEventArgs e);
+
+    public class BoxShapeEventArgs : EventArgs
+    {
+        public BoxShape box;
+
+        public BoxShapeEventArgs(BoxShape box)
+        {
+            this.box = box;
+        }
+    }
+    public delegate void BoxShapeEventHandle(Object sender,BoxShapeEventArgs e);
 
     public class MoveEventArgs : EventArgs
     {
@@ -47,7 +58,7 @@ namespace Tetris
     /// </summary>
     public enum BoxShape
     {
-        NULL=0, Z=1, S=2, T=3, I=4, O=5, L=6, J=7, BAN=999, BLANK=1000
+        NULL=0, Z=1, S=2, T=3, I=4, O=5, L=6, J=7, BAN=9, SHADOW = 10,BLANK=1000
     }
     /// <summary>
     /// 游戏状态

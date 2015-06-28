@@ -12,7 +12,7 @@ namespace Tetris
         {
             return "Blank.png";
         }
-        public static string GetUnitImgFromBoxShape(BoxShape bs)
+        public static string GetStringfromBoxShape(BoxShape bs)
         {
             //前面添加了BoxUnit_
             switch (bs)
@@ -33,6 +33,8 @@ namespace Tetris
                     return "Z.png";
                 case BoxShape.T:
                     return "T.png";
+                case BoxShape.SHADOW:
+                    return "Shadow.png";
                 case BoxShape.BAN:
                     return "Ban.png";
                 default:
