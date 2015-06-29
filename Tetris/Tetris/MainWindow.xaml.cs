@@ -38,6 +38,29 @@ namespace Tetris
         
         private void Window_KeyDown(Object sender,KeyEventArgs e)
         {
+            if (e.Key == Key.Enter)
+            {
+                if (game.State == GameState.Stoped)
+                {
+                    game.Start();
+                }
+                else if (game.State == GameState.Active)
+                {
+                    game.Pause();
+                }
+                else if (game.State == GameState.Paused)
+                {
+                    game.Continue();
+                }
+            }
+            else if (e.Key == Key.Escape)
+            {
+                if (game.State == GameState.Active || game.State == GameState.Paused)
+                {
+                    game.Stop();
+                }
+            }
+            else
             if (game.activeBox!=null)
             {
                 game.KeyDown(e);
@@ -50,9 +73,13 @@ namespace Tetris
             {
                 game.Start();
             }
+            else if (game.State == GameState.Paused)
+            {
+                game.Continue();
+            }
             else
             {
-                MessageBox.Show(this, "已启动游戏");
+                //MessageBox.Show(this, "已启动游戏");
             }
         }
 
@@ -64,18 +91,7 @@ namespace Tetris
             }
             else
             {
-                MessageBox.Show(this, "无法暂停");
-            }
-        }
-        private void ContinueBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (game.State == GameState.Paused)
-            {
-                game.Continue();
-            }
-            else
-            {
-                MessageBox.Show(this, "无法继续");
+                //MessageBox.Show(this, "无法暂停");
             }
         }
         private void StopBtn_Click(object sender, RoutedEventArgs e)
@@ -86,7 +102,7 @@ namespace Tetris
             }
             else
             {
-                MessageBox.Show(this, "无法停止");
+                //MessageBox.Show(this, "无法停止");
             }
         }
         private void QuitBtn_Click(object sender, RoutedEventArgs e)

@@ -80,9 +80,20 @@ namespace Tetris
                 }
             }
             else
-                entity = null;
+            {
+                if (reflect != null)
+                {
+                    if (temp != null)
+                        for (int i = 0; i < temp.Count; i++)
+                        {
+                            while (i < temp.Count && box.UnitInBox(temp[i].pos.x, temp[i].pos.y))
+                                temp.Remove(temp[i]);
+                        }
+                    reflect(this, new MoveEventArgs(temp, null));
+                    entity = null;
+                }
+            }
         }
-
         private List<Square> entity;
         private GameFrame gFrame;
     }

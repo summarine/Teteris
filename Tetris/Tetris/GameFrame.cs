@@ -79,16 +79,16 @@ namespace Tetris
 
             switch (e.Key)
             {
-                case Key.W:
+                case Key.W:case Key.Up:
                     activeBox.Change();
                     break;
-                case Key.A:
+                case Key.A:case Key.Left:
                     activeBox.MoveLeft();
                     break;
-                case Key.D:
+                case Key.D:case Key.Right:
                     activeBox.MoveRight();
                     break;
-                case Key.S:
+                case Key.S:case Key.Down:
                     activeBox.FastFall();
                     break;
                 default:
@@ -318,7 +318,7 @@ namespace Tetris
             for (int i = 0; i < list.Count; i++)
             {
                 p = list[i].pos;
-                container.map[p.x, p.y].Value = 0;
+                container.map[p.x, p.y].Value = BoxShape.NULL;
             }
         }
 
