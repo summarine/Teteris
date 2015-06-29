@@ -17,6 +17,15 @@ namespace Tetris
             ActiveBoxMoved += shadow.Reflect;
         }
 
+        public override void add_boxNum(int v = 1)
+        {
+            base.add_boxNum(v);
+            if (boxNum % 10 == 0)
+            {
+                Hard += 0.2;
+            }
+        }
+
         private BoxShadow shadow;
     }
 }

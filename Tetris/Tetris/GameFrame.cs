@@ -132,7 +132,8 @@ namespace Tetris
         /// </summary>
         public void Start()
         {
-            boxNum = 0;
+            Hard = 1;
+            boxNum = 1;
             ClearMap();
 
             activeBox = BoxFactory.Instance().GetNewBasicBox(this);
@@ -170,6 +171,7 @@ namespace Tetris
         public void Stop()
         {
             State = GameState.Stoped;
+            boxNum = 0;
             activeBox.Stop();
             activeBox = null;
             readyBox = null;
@@ -267,6 +269,7 @@ namespace Tetris
             if (bOK)
             {
                 readyBox = BoxFactory.Instance().GetNewBasicBox(this);
+                add_boxNum(1);
                 if (RenewReadyBox != null)
                 {
                     RenewReadyBox(this, new BoxShapeEventArgs(readyBox.shape));
@@ -337,18 +340,25 @@ namespace Tetris
         }
         protected GameState state;
         /// <summary>
-        /// set:输入的是每秒掉落多少格
-        /// get:输出的是掉落一格用多少毫微秒
+        /// 每秒掉落多少格
         /// </summary>
         public double Hard
         {
-            get { return boxDropInterval; }
+            get { return TimeIntervalToHard(boxDropInterval); }
             set
             {
-                double t = value;
-                t = 1e7 / t;
-                boxDropInterval = (int)t;
+                boxDropInterval = HardToTimeInterval(value);
             }
+        }
+        protected int HardToTimeInterval(double hard)
+        {
+            double t = hard;
+            t = 1e7 / t;
+            return (int)t;
+        }
+        protected double TimeIntervalToHard(int interval)
+        {
+            return 1e7 / (double)interval;
         }
 
         public int Row
@@ -356,7 +366,12 @@ namespace Tetris
             get { return row; }
         }
 
-        protected int boxDropInterval;
+        virtual public void add_boxNum(int v=1)
+        {
+            boxNum += v;
+        }
+
+        public int boxDropInterval;
         protected int boxNum;
         protected readonly Grid grid;
         protected readonly int row;

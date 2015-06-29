@@ -21,7 +21,7 @@ namespace Tetris
             this.gFrame = gf;
 
             timer1 = new DispatcherTimer();
-            timer1.Interval = new TimeSpan((int)gFrame.Hard);//gFrame.boxDropInterval);
+            timer1.Interval = new TimeSpan(gFrame.boxDropInterval);//gFrame.boxDropInterval);
             timer1.Tick += timer1_Tick;
 
             isActive = false;
