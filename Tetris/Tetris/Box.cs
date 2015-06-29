@@ -70,7 +70,6 @@ namespace Tetris
             //生成成功
 
             onBottom += gFrame.ActiveBoxCrush;
-            move += gFrame.MapChanged;
 
             move(this, new MoveEventArgs(null, entity));
             timer1.Start();
@@ -104,7 +103,7 @@ namespace Tetris
             isActive = true;
         }
 
-        protected virtual List<List<Position>> Shapes()
+        public virtual List<List<Position>> Shapes()
         {
             return null;
         }

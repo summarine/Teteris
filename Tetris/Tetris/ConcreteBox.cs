@@ -27,7 +27,7 @@ namespace Tetris
                 new Position(0,-1),new Position(-1,-1),new Position(-1,0),new Position(-1,1)
             }
         };
-        protected override List<List<Position>> Shapes()
+        public override List<List<Position>> Shapes()
         {
             return SHAPES;
         }
@@ -65,7 +65,7 @@ namespace Tetris
                 new Position(0,0),new Position(0,1),new Position(0,-1),new Position(-1,-1)
             }
         };
-        protected override List<List<Position>> Shapes()
+        public override List<List<Position>> Shapes()
         {
             return SHAPES;
         }
@@ -94,7 +94,7 @@ namespace Tetris
                 new Position(0,0),new Position(0,1),new Position(0,-1),new Position(0,-2)
             }
         };
-        protected override List<List<Position>> Shapes()
+        public override List<List<Position>> Shapes()
         {
             return SHAPES;
         }
@@ -123,7 +123,7 @@ namespace Tetris
                 new Position(0,-1),new Position(-1,-1),new Position(-1,0),new Position(-2,0)
             }
         };
-        protected override List<List<Position>> Shapes()
+        public override List<List<Position>> Shapes()
         {
             return SHAPES;
         }
@@ -152,7 +152,7 @@ namespace Tetris
                 new Position(0,1),new Position(-1,0),new Position(-1,1),new Position(-2,0)
             }
         };
-        protected override List<List<Position>> Shapes()
+        public override List<List<Position>> Shapes()
         {
             return SHAPES;
         }
@@ -177,7 +177,7 @@ namespace Tetris
                 new Position(0,0),new Position(0,1),new Position(-1,0),new Position(-1,-1)
             }
         };
-        protected override List<List<Position>> Shapes()
+        public override List<List<Position>> Shapes()
         {
             return SHAPES;
         }
@@ -218,7 +218,7 @@ namespace Tetris
                 new Position(0,0),new Position(-1,0),new Position(-1,1),new Position(-2,0)
             }
         };
-        protected override List<List<Position>> Shapes()
+        public override List<List<Position>> Shapes()
         {
             return SHAPES;
         }

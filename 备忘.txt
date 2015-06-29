@@ -3,15 +3,17 @@
 增加Contener类用来放置map[][]
 将Box_Timer从GameFrame中移至Box类中
 优化Box的change函数
-
-正在做
 ???优化按S后timer的下一次tick出现时间
-
-
-要做
 增加正在移动的方块的投影
 增加浏览窗类
 优化GameFrame总的CleanLines函数
 
+正在做
+
+
+要做
+排行榜类
+双人对战类
+--(可做)优化GameFrame总的CleanLines函数
 注意
 1.将条件转移语句改写成为多态性

@@ -34,6 +34,7 @@ namespace Tetris
             preview = new PreviewWindow(game, PreviewImage);
 
             game.RowsCleanEvent += scoreBoard.GetScore;
+            game.GameOverEvent += scoreBoard.WhenGameOver;
         }
         
         private void Window_KeyDown(Object sender,KeyEventArgs e)
@@ -63,7 +64,7 @@ namespace Tetris
             else
             if (game.activeBox!=null)
             {
-                game.KeyDown(e);
+                game.KeyDown(e.Key);
             }
         }
 

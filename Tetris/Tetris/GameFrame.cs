@@ -16,8 +16,10 @@ namespace Tetris
         /// 当准备的方块更新时发出
         /// </summary>
         public event BoxShapeEventHandle RenewReadyBox;
+        public event BoxShapeEventHandle RenewActiveBox;
         public event ScoreEventHandle RowsCleanEvent;
         public event BoxEventHandle ActiveBoxMoved;
+        public event EventHandler GameOverEvent;
         /// <summary>
         /// 构造函数，参数为主体网格,以及行数列数
         /// </summary>
@@ -72,12 +74,12 @@ namespace Tetris
         /// 键盘事件响应方法
         /// </summary>
         /// <param name="e"></param>
-        virtual public void KeyDown(KeyEventArgs e)
+        virtual public void KeyDown(Key key)
         {
             if (State != GameState.Active) return;
             if (activeBox == null) return;
 
-            switch (e.Key)
+            switch (key)
             {
                 case Key.W:case Key.Up:
                     activeBox.Change();
@@ -130,13 +132,14 @@ namespace Tetris
         /// <summary>
         /// 开始工作
         /// </summary>
-        public void Start()
+        virtual public void Start()
         {
             Hard = 1;
             boxNum = 1;
             ClearMap();
 
             activeBox = BoxFactory.Instance().GetNewBasicBox(this);
+            activeBox.move += this.MapChanged;
             readyBox = BoxFactory.Instance().GetNewBasicBox(this);
             if (RenewReadyBox != null)
             {
@@ -152,7 +155,7 @@ namespace Tetris
         /// <summary>
         /// 暂停
         /// </summary>
-        public void Pause()
+        virtual public void Pause()
         {
             State = GameState.Paused;
             activeBox.Pause();
@@ -160,7 +163,7 @@ namespace Tetris
         /// <summary>
         /// 从暂停状态开始
         /// </summary>
-        public void Continue()
+        virtual public void Continue()
         {
             State = GameState.Active;
             activeBox.Continue();
@@ -168,7 +171,7 @@ namespace Tetris
         /// <summary>
         /// 停止
         /// </summary>
-        public void Stop()
+        virtual public void Stop()
         {
             State = GameState.Stoped;
             boxNum = 0;
@@ -178,6 +181,10 @@ namespace Tetris
             if (RenewReadyBox != null)
             {
                 RenewReadyBox(this, null);
+            }
+            if (GameOverEvent != null)
+            {
+                GameOverEvent(this, null);
             }
         }
         /// <summary>
@@ -258,6 +265,7 @@ namespace Tetris
             //更新使用的方块
             activeBox.Stop();
             activeBox = readyBox;
+            activeBox.move += MapChanged;
             readyBox = null;
 
             bool bOK = true;
@@ -269,10 +277,15 @@ namespace Tetris
             if (bOK)
             {
                 readyBox = BoxFactory.Instance().GetNewBasicBox(this);
+
                 add_boxNum(1);
                 if (RenewReadyBox != null)
                 {
                     RenewReadyBox(this, new BoxShapeEventArgs(readyBox.shape));
+                }
+                if (RenewActiveBox != null)
+                {
+                    RenewActiveBox(this,null);
                 }
             }
             else

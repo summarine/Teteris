@@ -34,35 +34,42 @@ namespace Tetris
             Box box = null;
             Random rand = new Random(seed);
             seed = rand.Next();
-            int id = rand.Next(7);
+            int id = rand.Next(7)+1;
+            return GetBoxFromId(id, gf);
+        }
+
+        public Box GetBoxFromId(int id,GameFrame gf = null)
+        {
+            Box box=null;
             switch (id)
             {
-                case 0:
-                    box = new L_Box(gf);
-                    break;
                 case 1:
-                    box = new J_Box(gf);
-                    break;
-                case 2:
-                    box = new I_Box(gf);
-                    break;
-                case 3:
                     box = new Z_Box(gf);
                     break;
-                case 4:
+                case 2:
                     box = new S_Box(gf);
+                    break;
+                case 3:
+                    box = new T_Box(gf);
+                    break;
+                case 4:
+                    box = new I_Box(gf);
                     break;
                 case 5:
                     box = new O_Box(gf);
                     break;
                 case 6:
-                    box = new T_Box(gf);
+                    box = new L_Box(gf);
+                    break;
+                case 7:
+                    box = new J_Box(gf);
                     break;
             }
             if (box == null)
                 box = new I_Box(gf);
             return box;
         }
+
         private ImageBrush[] brush = new ImageBrush[20];
         public ImageBrush GetBoxImageBrush(BoxShape bs)
         {

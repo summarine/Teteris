@@ -60,7 +60,8 @@ namespace Tetris
         }
         public void WhenGameOver(Object sender,EventArgs e)
         {
-
+            //排行榜
+            //....
             Clear();
         }
 
