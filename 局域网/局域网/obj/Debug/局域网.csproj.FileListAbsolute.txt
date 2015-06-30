@@ -1,0 +1,10 @@
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\bin\Debug\局域网.exe.config
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\bin\Debug\局域网.exe
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\bin\Debug\局域网.pdb
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\obj\Debug\局域网.csprojResolveAssemblyReference.cache
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\obj\Debug\局域网.Form1.resources
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\obj\Debug\局域网.Properties.Resources.resources
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\obj\Debug\局域网.csproj.GenerateResource.Cache
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\obj\Debug\局域网.exe
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\obj\Debug\局域网.pdb
+f:\users\zhxichao\documents\visual studio 2012\Projects\局域网\局域网\obj\Debug\局域网.Friend.resources
