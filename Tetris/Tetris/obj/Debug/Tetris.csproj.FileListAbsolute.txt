@@ -53,3 +53,5 @@ E:\文档\实训2\Teteris\Tetris\Tetris\obj\Debug\MainWindow.baml
 E:\文档\实训2\Teteris\Tetris\Tetris\obj\Debug\Tetris.g.resources
 E:\文档\实训2\Teteris\Tetris\Tetris\obj\Debug\Tetris.Properties.Resources.resources
 E:\文档\实训2\Teteris\Tetris\Tetris\obj\Debug\Tetris.csproj.GenerateResource.Cache
+E:\实训2\Teteris\Tetris\Tetris\obj\Debug\AIWindow.baml
+E:\实训2\Teteris\Tetris\Tetris\obj\Debug\AIWindow.g.cs

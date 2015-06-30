@@ -120,14 +120,13 @@ namespace Tetris
         {
             if (x >= row || x < 0 || y >= column || y < 0)
                 return false;
+            if (activeBox.UnitInBox(x, y))
+                return true;
             if (container.map[x, y].Value == BoxShape.NULL || container.map[x,y].Value == BoxShape.SHADOW)
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         /// <summary>
         /// 开始工作
@@ -137,6 +136,7 @@ namespace Tetris
             Hard = 1;
             boxNum = 1;
             ClearMap();
+            State = GameState.Active;
 
             activeBox = BoxFactory.Instance().GetNewBasicBox(this);
             activeBox.move += this.MapChanged;
@@ -145,10 +145,15 @@ namespace Tetris
             {
                 RenewReadyBox(this, new BoxShapeEventArgs(readyBox.shape));
             }
-            State = GameState.Active;
+            
             if (!activeBox.Act())
             {
                 GameOver();
+            }
+            
+            if (RenewActiveBox != null)
+            {
+                RenewActiveBox(this, null);
             }
 
         }
@@ -175,7 +180,8 @@ namespace Tetris
         {
             State = GameState.Stoped;
             boxNum = 0;
-            activeBox.Stop();
+            if (activeBox!=null)
+                activeBox.Stop();
             activeBox = null;
             readyBox = null;
             if (RenewReadyBox != null)
@@ -385,7 +391,7 @@ namespace Tetris
         }
 
         public int boxDropInterval;
-        protected int boxNum;
+        public int boxNum;
         protected readonly Grid grid;
         protected readonly int row;
         protected readonly int column;

@@ -19,12 +19,8 @@ namespace Tetris
         public Box(GameFrame gf)
         {
             this.gFrame = gf;
-
-            timer1 = new DispatcherTimer();
-            timer1.Interval = new TimeSpan(gFrame.boxDropInterval);//gFrame.boxDropInterval);
-            timer1.Tick += timer1_Tick;
-
             isActive = false;
+            center = new Position(2, gFrame.Column / 2);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -42,6 +38,7 @@ namespace Tetris
         {
             if (!isActive)
             {
+                timer2.Stop();
                 return;
             }
             if (!MoveDown())
@@ -58,7 +55,6 @@ namespace Tetris
         public bool Act()
         {
             //生成
-            center = new Position(2, gFrame.Column / 2);
 
             for (int i = 0; i < 4; i++)
             {
@@ -68,6 +64,9 @@ namespace Tetris
                     return false;
             }
             //生成成功
+            timer1 = new DispatcherTimer();
+            timer1.Interval = new TimeSpan(gFrame.boxDropInterval);//gFrame.boxDropInterval);
+            timer1.Tick += timer1_Tick;
 
             onBottom += gFrame.ActiveBoxCrush;
 
@@ -137,7 +136,8 @@ namespace Tetris
             else
             {
                 List<Square> sw = temp; temp = entity; entity = sw;
-                move(this, new MoveEventArgs(temp, entity));
+                if (isActive && move!=null)
+                    move(this, new MoveEventArgs(temp, entity));
                 //entity = temp;
             }
             return true;
@@ -169,7 +169,8 @@ namespace Tetris
         }
         public void FastFall()
         {
-            timer1.Stop();
+            if (timer1 != null)
+                timer1.Stop();
 
             int mi = 100;
             int tx, ty;
@@ -214,7 +215,8 @@ namespace Tetris
             List<Square> sw = temp; temp = entity; entity = sw;
             center.x += dx;
             center.y += dy;
-            move(this, new MoveEventArgs(temp, entity));
+            if (isActive && move!=null)
+                move(this, new MoveEventArgs(temp, entity));
 
             return true;
         }
