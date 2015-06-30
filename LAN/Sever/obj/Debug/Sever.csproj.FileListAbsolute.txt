@@ -1,0 +1,36 @@
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\bin\Debug\Sever.exe.config
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\bin\Debug\Sever.exe
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\bin\Debug\Sever.pdb
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\obj\Debug\Sever.csprojResolveAssemblyReference.cache
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\obj\Debug\Sever.Form1.resources
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\obj\Debug\Sever.Properties.Resources.resources
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\obj\Debug\Sever.csproj.GenerateResource.Cache
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\obj\Debug\Sever.exe
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Sever\obj\Debug\Sever.pdb
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\bin\Debug\Sever.exe.config
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\obj\Debug\Sever.exe
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\obj\Debug\Sever.pdb
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\bin\Debug\Sever.exe
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\bin\Debug\Sever.pdb
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\obj\Debug\Sever.csprojResolveAssemblyReference.cache
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\obj\Debug\Sever.Form1.resources
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\obj\Debug\Sever.Properties.Resources.resources
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Sever\obj\Debug\Sever.csproj.GenerateResource.Cache
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\bin\Debug\Sever.exe.config
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\obj\Debug\Sever.exe
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\obj\Debug\Sever.pdb
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\bin\Debug\Sever.exe
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\bin\Debug\Sever.pdb
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\obj\Debug\Sever.csprojResolveAssemblyReference.cache
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\obj\Debug\Sever.Form1.resources
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\obj\Debug\Sever.Properties.Resources.resources
+C:\Users\zhaoxiaochao\Desktop\LAN\Sever\obj\Debug\Sever.csproj.GenerateResource.Cache
+F:\Users\zhxichao\Music\LAN\Sever\bin\Debug\Sever.exe.config
+F:\Users\zhxichao\Music\LAN\Sever\obj\Debug\Sever.exe
+F:\Users\zhxichao\Music\LAN\Sever\obj\Debug\Sever.pdb
+F:\Users\zhxichao\Music\LAN\Sever\bin\Debug\Sever.exe
+F:\Users\zhxichao\Music\LAN\Sever\bin\Debug\Sever.pdb
+F:\Users\zhxichao\Music\LAN\Sever\obj\Debug\Sever.csprojResolveAssemblyReference.cache
+F:\Users\zhxichao\Music\LAN\Sever\obj\Debug\Sever.Form1.resources
+F:\Users\zhxichao\Music\LAN\Sever\obj\Debug\Sever.Properties.Resources.resources
+F:\Users\zhxichao\Music\LAN\Sever\obj\Debug\Sever.csproj.GenerateResource.Cache

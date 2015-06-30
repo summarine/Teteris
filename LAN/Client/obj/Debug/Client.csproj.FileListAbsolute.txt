@@ -1,0 +1,36 @@
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\bin\Debug\Client.exe.config
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\bin\Debug\Client.exe
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\bin\Debug\Client.pdb
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\obj\Debug\Client.Form1.resources
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\obj\Debug\Client.Properties.Resources.resources
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\obj\Debug\Client.exe
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\obj\Debug\Client.pdb
+F:\Users\zhxichao\documents\visual studio 2012\Projects\LAN\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\bin\Debug\Client.exe.config
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\bin\Debug\Client.exe
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\bin\Debug\Client.pdb
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\obj\Debug\Client.Form1.resources
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\obj\Debug\Client.exe
+C:\Users\zhaoxiaochao\Documents\Visual Studio 2012\Projects\LAN\Client\obj\Debug\Client.pdb
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\bin\Debug\Client.exe.config
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\bin\Debug\Client.exe
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\bin\Debug\Client.pdb
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\obj\Debug\Client.Form1.resources
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\obj\Debug\Client.exe
+C:\Users\zhaoxiaochao\Desktop\LAN\Client\obj\Debug\Client.pdb
+F:\Users\zhxichao\Music\LAN\Client\bin\Debug\Client.exe.config
+F:\Users\zhxichao\Music\LAN\Client\bin\Debug\Client.exe
+F:\Users\zhxichao\Music\LAN\Client\bin\Debug\Client.pdb
+F:\Users\zhxichao\Music\LAN\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+F:\Users\zhxichao\Music\LAN\Client\obj\Debug\Client.Form1.resources
+F:\Users\zhxichao\Music\LAN\Client\obj\Debug\Client.Properties.Resources.resources
+F:\Users\zhxichao\Music\LAN\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+F:\Users\zhxichao\Music\LAN\Client\obj\Debug\Client.exe
+F:\Users\zhxichao\Music\LAN\Client\obj\Debug\Client.pdb

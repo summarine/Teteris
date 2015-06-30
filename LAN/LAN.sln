@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{BE5A3BAD-2D91-4060-9092-00D16FD87991}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sever", "Sever\Sever.csproj", "{75FEE38F-6574-4340-9510-594CDF3AD5F3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE5A3BAD-2D91-4060-9092-00D16FD87991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5A3BAD-2D91-4060-9092-00D16FD87991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5A3BAD-2D91-4060-9092-00D16FD87991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5A3BAD-2D91-4060-9092-00D16FD87991}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75FEE38F-6574-4340-9510-594CDF3AD5F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75FEE38F-6574-4340-9510-594CDF3AD5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75FEE38F-6574-4340-9510-594CDF3AD5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75FEE38F-6574-4340-9510-594CDF3AD5F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
