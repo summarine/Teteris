@@ -60,7 +60,7 @@ namespace Tetris
             {
                 entity[i].pos.x += center.x;
                 entity[i].pos.y += center.y;
-                if (!gFrame.UnitAvilible(entity[i].pos.x, entity[i].pos.y))
+                if (!gFrame.UnitIsEmpty(entity[i].pos.x, entity[i].pos.y))
                     return false;
             }
             //生成成功

@@ -25,12 +25,13 @@ namespace Tetris
             binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             scoring_Board.SetBinding(Label.ContentProperty, binding);
 
+            threshold = 500;
             L1 = l1; L2 = l2; L3 = l3; L4 = l4;
         }
 
-        public void GetScore(Object sender,ScoreEventArgs e)
+        public void GetScore(Object sender,RowEventArgs e)
         {
-            int r = e.value;
+            int r = e.value.Count;
             int s = 0;
             switch (r)
             {
@@ -64,24 +65,57 @@ namespace Tetris
             //....
             Clear();
         }
-
-        private int L1, L2, L3, L4;
-
-        public int Score
+        virtual public int Score
         {
             get { return score; }
             set
             {
+                
                 this.score = value;
-
+                
                 if (this.PropertyChanged != null)
                 {
                     this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Score"));
                 }
             }
         }
-        private int score;
-        
 
+        protected int threshold;
+        protected int score;
+        protected int L1, L2, L3, L4;
+    }
+
+    public class DoubleScoringBoard : ScoringBoard
+    {
+        /// <summary>
+        /// 到达阀值后触发
+        /// </summary>
+        public event ScoreEventHandle CrossThreshold;
+        public DoubleScoringBoard(Label sc):base(sc)
+        {
+            threshold = 400;
+        }
+
+        public override int Score
+        {
+            get
+            {
+                return base.Score;
+            }
+            set
+            {
+                int temp = value;
+                if (temp > threshold)
+                {
+                    if (CrossThreshold != null)
+                    {
+                        CrossThreshold(this, new ScoreEventArgs(1));
+                    }
+                    temp -= threshold;
+                }
+                base.Score = temp;
+            }
+        }
+        
     }
 }

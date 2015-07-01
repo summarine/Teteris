@@ -17,8 +17,14 @@ namespace Tetris
         /// </summary>
         public event BoxShapeEventHandle RenewReadyBox;
         public event BoxShapeEventHandle RenewActiveBox;
-        public event ScoreEventHandle RowsCleanEvent;
+        /// <summary>
+        /// 行被消除时触发
+        /// </summary>
+        public event RowEventHandle RowsCleanEvent;
         public event BoxEventHandle ActiveBoxMoved;
+        /// <summary>
+        /// 游戏结束时触发
+        /// </summary>
         public event EventHandler GameOverEvent;
         /// <summary>
         /// 构造函数，参数为主体网格,以及行数列数
@@ -66,6 +72,49 @@ namespace Tetris
 
         }
 
+        /// <summary>
+        /// 增加无用的干扰行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void AddUselessRows(object sender, ScoreEventArgs e)
+        {
+            int holesCnt = 4;
+            Random rand= new Random();
+            List<int> uselessRow = new List<int>();
+            for (int i = 0; i < column; i++)
+                uselessRow.Add(1);
+            for (int i = 0; i < holesCnt; i++)
+            {
+                int t = rand.Next(column);
+                uselessRow[t] = 0;
+            }
+            for (int r=0;r<row-1;r++)
+            {
+                for (int c=0;c<column;c++)
+                {
+                    if (r==0)
+                    {
+                        if (!UnitAvilible(r,c))
+                        {
+                            GameOver();
+                        }
+                    }
+                    BoxShape bs = BoxShape.NULL;
+                    if (container.map[r + 1, c].Value != BoxShape.SHADOW)
+                        if (!activeBox.UnitInBox(r + 1, c))
+                            bs = container.map[r + 1, c].Value;
+                    container.map[r, c].Value = bs;
+                }
+            }
+            for (int c=0;c<column;c++)
+            {
+                if (uselessRow[c] == 1)
+                    container.map[row - 1, c].Value = BoxShape.OBINARY;
+                else
+                    container.map[row - 1, c].Value = BoxShape.NULL;
+            }
+        }
         /// <summary>
         /// 列属性
         /// </summary>
@@ -123,6 +172,16 @@ namespace Tetris
             if (activeBox.UnitInBox(x, y))
                 return true;
             if (container.map[x, y].Value == BoxShape.NULL || container.map[x,y].Value == BoxShape.SHADOW)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool UnitIsEmpty(int x, int y)
+        {
+            if (x >= row || x < 0 || y >= column || y < 0)
+                return false;
+            if (container.map[x, y].Value == BoxShape.NULL || container.map[x, y].Value == BoxShape.SHADOW)
             {
                 return true;
             }
@@ -198,7 +257,7 @@ namespace Tetris
         /// </summary>
         public void GameOver()
         {
-            ClearMap(999);
+            //ClearMap(999);
             Stop();
             //score.??
         }
@@ -209,26 +268,34 @@ namespace Tetris
         protected void CleanLines(List<int> list)
         {
             //朴素实现，有空来优化
-            int r = list.Count();
-            int i, j, k, l, t = r;
-            for (i = 0; i < r; i++)
+            if (list == null || list.Count == 0)
+                return;
+            int fillRow = row - 1;
+            int n = 0;
+            for (int r = row - 1; r >= 0; r--)
             {
-                l = list[i]+i;
-                for (k = l; k >= 1; k--)
+                if (n < list.Count && r == list[n])
                 {
-                    for (j = 0; j < column; j++)
-                    {
-                        container.map[k, j].Value = container.map[k - 1, j].Value;
-                    }
+                    n++;
                 }
-                for (; k >= 0; k--)
+                else
                 {
-                    for (j = 0; j < column; j++)
+                    if (fillRow > r)
                     {
-                        container.map[k, j].Value = 0;
+                        for (int c = 0; c < column; c++)
+                        {
+                            container.map[fillRow, c].Value = container.map[r, c].Value;
+                        }
                     }
+                    fillRow--;
                 }
             }
+            for (int r = fillRow; r >= 0; r--)
+            {
+                for (int c = 0; c < column; c++)
+                    container.map[r, c].Value = BoxShape.NULL;
+            }
+
         }
         /// <summary>
         /// 检查放满的行
@@ -253,7 +320,7 @@ namespace Tetris
             {
                 CleanLines(cl);
                 if (RowsCleanEvent != null)
-                    RowsCleanEvent(this, new ScoreEventArgs(cl.Count));
+                    RowsCleanEvent(this, new RowEventArgs(cl));
             }
             return cl.Count();
         }
@@ -390,10 +457,15 @@ namespace Tetris
             boxNum += v;
         }
 
+
+
         public int boxDropInterval;
         public int boxNum;
         protected readonly Grid grid;
         protected readonly int row;
         protected readonly int column;
+
+
+
     }
 }

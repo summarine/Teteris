@@ -20,10 +20,9 @@ namespace Tetris
         public override void add_boxNum(int v = 1)
         {
             base.add_boxNum(v);
-            if (boxNum % 10 == 0)
-            {
-                Hard += 0.2;
-            }
+            Random r = new Random();
+            int c = r.Next(10);
+
         }
 
         private BoxShadow shadow;

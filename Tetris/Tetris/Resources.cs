@@ -17,6 +17,8 @@ namespace Tetris
             //前面添加了BoxUnit_
             switch (bs)
             {
+                case BoxShape.OBINARY:
+                    return "Obinary.png";
                 case BoxShape.BLANK:
                     return "Blank.png";
                 case BoxShape.I:

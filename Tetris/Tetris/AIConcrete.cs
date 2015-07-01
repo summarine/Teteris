@@ -148,7 +148,7 @@ namespace Tetris
                 }
                 else
                 {
-                    if (fillRow<r)
+                    if (fillRow>r)
                     {
                         for (int c=0;c<col;c++)
                         {

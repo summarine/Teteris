@@ -60,6 +60,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="double.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -76,6 +80,9 @@
     </Compile>
     <Compile Include="Box.cs" />
     <Compile Include="BoxShadow.cs" />
+    <Compile Include="double.xaml.cs">
+      <DependentUpon>double.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyGameFrame.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Score.cs" />

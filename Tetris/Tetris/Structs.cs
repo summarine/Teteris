@@ -43,22 +43,32 @@ namespace Tetris
     }
     public delegate void MoveEventHandle(Object sender, MoveEventArgs e);
 
-    public class ScoreEventArgs : EventArgs
+    public class RowEventArgs : EventArgs
     {
-        public int value;
+        public List<int> value;
         
-        public ScoreEventArgs(int value)
+        public RowEventArgs(List<int> value)
         {
             this.value = value;
         }
     }
-    public delegate void ScoreEventHandle(Object sender, ScoreEventArgs e);
+    public delegate void RowEventHandle(Object sender, RowEventArgs e);
+
+    public class ScoreEventArgs : EventArgs
+    {
+        int value;
+        public ScoreEventArgs(int value)
+        { 
+            this.value = value;
+        }
+    }
+    public delegate void ScoreEventHandle(Object sender,ScoreEventArgs e);
     /// <summary>
     /// 方块的形状,NULL表示没有形状,BAN表示禁用
     /// </summary>
     public enum BoxShape
     {
-        NULL=0, Z=1, S=2, T=3, I=4, O=5, L=6, J=7, BAN=9, SHADOW = 10,BLANK=1000
+        NULL = 0, Z = 1, S = 2, T = 3, I = 4, O = 5, L = 6, J = 7, OBINARY = 8, BAN = 9, SHADOW = 10, BLANK = 1000
     }
     /// <summary>
     /// 游戏状态
