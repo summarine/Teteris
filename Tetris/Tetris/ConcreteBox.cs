@@ -6,91 +6,231 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    class ConcreteBox
+    public class L_Box : Box
     {
-    }
-    class L_Box : Box
-    {
-        public L_Box() : base()
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
-            entity = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(-2,0)
-            };
-
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(-1,0),new Position(-2,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(0,1),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-2,0),new Position(-2,-1)
+            },
+            new List<Position>()
+            {
+                new Position(0,-1),new Position(-1,-1),new Position(-1,0),new Position(-1,1)
+            }
+        };
+        public override List<List<Position>> Shapes()
+        {
+            return SHAPES;
         }
-    }
-    class J_Box : Box
-    {
-        public J_Box() : base()
+        public L_Box(GameFrame gf)
+            : base(gf)
         {
-            entity = new List<Position>{
-                new Position(0,0),
-                new Position(0,-1),
-                new Position(-1,0),
-                new Position(-2,0)
-            };
-        }
-    }
-    class I_Box : Box
-    {
-        public I_Box() : base()
-        {
-            entity = new List<Position>{
-                new Position(0,0),
-                new Position(1,0),
-                new Position(-1,0),
-                new Position(-2,0)
+            state = 0;
+            this.shape = BoxShape.L;
+            entity = new List<Square>{
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-2,0), shape),
             };
         }
     }
-    class Z_Box : Box
+    public class J_Box : Box
     {
-        public Z_Box() : base()
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
-            entity = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(-1,-1)
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(-1,0),new Position(-2,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,1),new Position(-1,-1),new Position(-1,0),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-2,0),new Position(-2,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(0,-1),new Position(-1,-1)
+            }
+        };
+        public override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
+        public J_Box(GameFrame gf)
+            : base(gf)
+        {
+            this.shape = BoxShape.J;
+            entity = new List<Square>{
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,-1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-2,0), shape)
             };
         }
     }
-    class S_Box : Box
+    public class I_Box : Box
     {
-        public S_Box():base()
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
-            entity = new List<Position>{
-                new Position(0,0),
-                new Position(0,-1),
-                new Position(-1,0),
-                new Position(-1,1)
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-2,0),new Position(-3,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(0,-1),new Position(0,-2)
+            }
+        };
+        public override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
+        public I_Box(GameFrame gf)
+            : base(gf)
+        {
+            this.shape = BoxShape.I;
+            entity = new List<Square>{
+                new Square(new Position(0,0), shape),
+                new Square(new Position(1,0), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-2,0), shape),
             };
         }
     }
-    class O_Box : Box
+    public class Z_Box : Box
     {
-        public O_Box():base()
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
-            entity = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(-1,1)
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(-1,0),new Position(-1,-1)
+            },
+            new List<Position>()
+            {
+                new Position(0,-1),new Position(-1,-1),new Position(-1,0),new Position(-2,0)
+            }
+        };
+        public override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
+        public Z_Box(GameFrame gf)
+            : base(gf)
+        {
+            this.shape = BoxShape.Z;
+            entity = new List<Square>{
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-1,-1), shape),
             };
         }
     }
-    class T_Box : Box
+    public class S_Box : Box
     {
-        public T_Box():base()
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
         {
-            entity = new List<Position>{
-                new Position(0,0),
-                new Position(0,1),
-                new Position(-1,0),
-                new Position(0,-1)
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(-1,0),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,1),new Position(-1,0),new Position(-1,1),new Position(-2,0)
+            }
+        };
+        public override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
+        public S_Box(GameFrame gf)
+            : base(gf)
+        {
+            this.shape = BoxShape.S;
+            entity = new List<Square>{
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,-1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-1,1), shape),
+            };
+        }
+    }
+    public class O_Box : Box
+    {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,1),new Position(-1,0),new Position(-1,-1)
+            }
+        };
+        public override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
+        public O_Box(GameFrame gf)
+            : base(gf)
+        {
+            this.shape = BoxShape.O;
+            entity = new List<Square>{
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(-1,1), shape),
+            };
+        }
+        public override bool Change()
+        {
+            return false;
+        }
+    }
+    public class T_Box : Box
+    {
+        static protected List<List<Position>> SHAPES = new List<List<Position>>
+        {
+            new List<Position>()
+            {
+                new Position(0,0),new Position(0,-1),new Position(-1,0),new Position(0,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-1,-1),new Position(-2,0)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-1,-1),new Position(-1,1)
+            },
+            new List<Position>()
+            {
+                new Position(0,0),new Position(-1,0),new Position(-1,1),new Position(-2,0)
+            }
+        };
+        public override List<List<Position>> Shapes()
+        {
+            return SHAPES;
+        }
+        public T_Box(GameFrame gf)
+            : base(gf)
+        {
+            this.shape = BoxShape.T;
+            entity = new List<Square>{
+                new Square(new Position(0,0), shape),
+                new Square(new Position(0,1), shape),
+                new Square(new Position(-1,0), shape),
+                new Square(new Position(0,-1), shape),
             };
         }
     }

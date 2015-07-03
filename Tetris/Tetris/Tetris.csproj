@@ -56,17 +56,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AIWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="double.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AIBase.cs" />
+    <Compile Include="AIConcrete.cs" />
+    <Compile Include="AIFrame.cs" />
+    <Compile Include="AIWindow.xaml.cs">
+      <DependentUpon>AIWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Box.cs" />
+    <Compile Include="BoxShadow.cs" />
+    <Compile Include="double.xaml.cs">
+      <DependentUpon>double.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyGameFrame.cs" />
+    <Compile Include="Resources.cs" />
+    <Compile Include="Score.cs" />
+    <Compile Include="Structs.cs" />
     <Compile Include="BoxFactory.cs" />
     <Compile Include="ConcreteBox.cs" />
+    <Compile Include="Container.cs" />
     <Compile Include="GameFrame.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -74,6 +97,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PreviewWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
