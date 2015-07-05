@@ -41,7 +41,12 @@ namespace Tetris
             }
             if (File.Exists(path))
             {
-                img.Source = new BitmapImage(new Uri(path, UriKind.Absolute));
+                img.Dispatcher.Invoke(
+                               new Action(
+                                          delegate
+                                          {
+                                              img.Source = new BitmapImage(new Uri(path, UriKind.Absolute));
+                                          }));
             }
             else
             {

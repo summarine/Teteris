@@ -9,11 +9,11 @@ namespace Tetris
 {
     class SimpleAI : AIBase
     {
-        public SimpleAI(int r, int c, AIFrame frame)
+        public SimpleAI(int r, int c, AIFrame frame,AI_Integrator ai_Integrator)
         {
             this.aiFrame = frame;
             Init(r, c);
-            integrator = new AI_Integrator();
+            integrator = ai_Integrator;
         }
         public override void Init(int row, int col)
         {
@@ -36,10 +36,11 @@ namespace Tetris
 
             perioty = 0;
             operations = new List<Key>();
-            for (int j = 0; j < aiFrame.activeBox.Shapes().Count; j++)
+            int i, j;
+            for (j = 0; j < aiFrame.activeBox.Shapes().Count; j++)
             {
                 //Console.WriteLine("     Shape Change Time is {0}",j);
-                for (int i = col/2; i < col; i++)
+                for (i = col / 2; i < col; i++)
                 {
                     int mark = MakeTry(i, j, active);
                     //Console.WriteLine("          Position {0} : Mark is {1}",i,mark);
@@ -51,10 +52,10 @@ namespace Tetris
                         operations = tempOpr;
                     }
                 }
-                for (int i=col/2-1;i>=0;i--)
+                for (i = col / 2 - 1; i >= 0; i--)
                 {
                     int mark = MakeTry(i, j, active);
-                   // Console.WriteLine("          Position {0} : Mark is {1}", i, mark);
+                    // Console.WriteLine("          Position {0} : Mark is {1}", i, mark);
                     if (mark == -1) break;
                     if (mark > perioty)
                     {
@@ -71,7 +72,7 @@ namespace Tetris
             int i, j, k, t;
             Key tKey;
             int ty = col / 2, tx = 2;
-            Box box = BoxFactory.Instance().GetBoxFromId((int)bshape,aiFrame);
+            Box box = BoxFactory.GetBoxFromId((int)bshape, aiFrame);
             for (i = 0; i < 4; i++)
             {
                 box.Entity[i].pos.x += tx;
@@ -110,7 +111,7 @@ namespace Tetris
                 for (j = 0; j < col; j++)
                 {
                     t = (int)(aiFrame.container.map[i, j].Value);
-                    if (t > 0 && t < 8 && ! aiFrame.activeBox.UnitInBox(i,j))
+                    if (t > 0 && t < 9 && !aiFrame.activeBox.UnitInBox(i, j))
                         map[i, j] = 1;
                     else
                         map[i, j] = 0;
@@ -121,36 +122,32 @@ namespace Tetris
                 ty = box.Entity[i].pos.y;
                 map[tx, ty] = 1;
             }
+
             ProcessMap();
             int rtn = integrator.CalculateScore();
-
-            //if (bshape == BoxShape.L && changeTimes == 2) rtn *= 10; 
 
             return rtn;
         }
         private void ProcessMap()
         {
-            //消行算法已优化
             integrator.Init();
-
-            int fillRow = row-1;
-
-            for (int r=row-1;r>=0;r--)
+            int fillRow = row - 1;
+            for (int r = row - 1; r >= 0; r--)
             {
-                int sum=0;
-                for (int c=0;c<col;c++)
+                int sum = 0;
+                for (int c = 0; c < col; c++)
                 {
                     sum += map[r, c];
                 }
-                if (sum==col)
+                if (sum == col)
                 {
                     integrator.cleanedLines++;
                 }
                 else
                 {
-                    if (fillRow>r)
+                    if (fillRow > r)
                     {
-                        for (int c=0;c<col;c++)
+                        for (int c = 0; c < col; c++)
                         {
                             map[fillRow, c] = map[r, c];
                         }
@@ -158,22 +155,27 @@ namespace Tetris
                     fillRow--;
                 }
             }
-            for (int r=fillRow;r>=0;r--)
+            for (int r = fillRow; r >= 0; r--)
             {
                 for (int c = 0; c < col; c++)
                     map[r, c] = 0;
             }
 
 
-            int ghole=0,h,lh=0,gsqr=0,thole;
+
+            int[] hasHole = new int[row];
+            for (int i = 0; i < row; i++) hasHole[i] = 0;
+            int[] hasFloat = new int[row];
+            for (int i = 0; i < row; i++) hasFloat[i] = 0;
+            int ghole = 0, h, lh = 0, gsqr = 0, thole;
             //提取各个关键数据
-            for (int c=0;c<col;c++)
+            for (int c = 0; c < col; c++)
             {
                 ghole = 0;
                 gsqr = 0;
                 h = 0;
                 thole = 0;
-                for (int r=row-1;r>=2;r--)
+                for (int r = row - 1; r >= 2; r--)
                 {
                     if (map[r, c] == 0)
                     {
@@ -182,18 +184,31 @@ namespace Tetris
 
                         ghole++;
                         thole++;
+
+                        int k = r - 1;
+                        while (k >= 0 && map[k, c] == 1)
+                        {
+                            hasFloat[k]++;
+                            k--;
+                        }
                     }
                     if (map[r, c] != 0)
                     {
                         gsqr++;
                         h = row - r;
-
                         integrator.holes += ghole;
                         ghole = 0;
+
+                        int k = r + 1;
+                        while (k < row && map[k, c] == 0)
+                        {
+                            hasHole[k]++;
+                            k++;
+                        }
                     }
                     integrator.floadSqr[thole] += gsqr;
                 }
-                if (c!=0)
+                if (c != 0)
                 {
                     integrator.highDft[Math.Abs(h - lh)]++;
                 }
@@ -201,14 +216,20 @@ namespace Tetris
                 if (h > integrator.top) integrator.top = h;
                 if (h < integrator.bottom) integrator.bottom = h;
             }
+
+            for (int i = 0; i < row; i++)
+            {
+                if (hasFloat[i] > 0) integrator.trueFloat++;
+                if (hasHole[i] > 0) integrator.trueHoles++;
+            }
         }
 
         private void PaintMap()
         {
             Console.WriteLine("Paint Map ---------------------------");
-            for (int r=0;r<row;r++)
+            for (int r = 0; r < row; r++)
             {
-                for (int c=0;c<col;c++)
+                for (int c = 0; c < col; c++)
                 {
                     char cc = '_';
                     if (map[r, c] == 1)

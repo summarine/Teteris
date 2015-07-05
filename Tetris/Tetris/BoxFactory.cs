@@ -12,33 +12,25 @@ namespace Tetris
     public class BoxFactory
     {
 
-        static public BoxFactory Instance()
-        {
-            if (_instance == null)
-                _instance = new BoxFactory();
-            return _instance;
-        }
-
-        private BoxFactory()
+        public BoxFactory()
         {
             seed = (new Random()).Next();
         }
 
-        public void setSeed(int s)
+        public void SetSeed(int s)
         {
             seed = s;
         }
 
         public Box GetNewBasicBox(GameFrame gf = null)
         {
-            Box box = null;
             Random rand = new Random(seed);
             seed = rand.Next();
             int id = rand.Next(7)+1;
             return GetBoxFromId(id, gf);
         }
 
-        public Box GetBoxFromId(int id,GameFrame gf = null)
+        static public Box GetBoxFromId(int id,GameFrame gf = null)
         {
             Box box=null;
             switch (id)
@@ -70,10 +62,11 @@ namespace Tetris
             return box;
         }
 
-        private ImageBrush[] brush = new ImageBrush[20];
-        public ImageBrush GetBoxImageBrush(BoxShape bs)
+        static private ImageBrush[] brush = new ImageBrush[20];
+
+        static public ImageBrush GetBoxImageBrush(BoxShape bs)
         {
-            if (bs == BoxShape.BLANK) return null;
+            if (bs == BoxShape.BLANK || bs == null) return null;
             if ((int)bs < 20)
             {
                 if (brush[(int)bs] == null)
@@ -90,6 +83,5 @@ namespace Tetris
         }
 
         private int seed;
-        static private BoxFactory _instance;
     }
 }

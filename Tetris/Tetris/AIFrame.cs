@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Timers;
 
 namespace Tetris
 {
     class AIFrame : GameFrame
     {
-        DispatcherTimer timer1;
+        Timer timer1;
         public AIFrame(Grid grid,int row,int col):base(grid,row,col)
         {
             RenewActiveBox += AIWork;
@@ -31,11 +32,11 @@ namespace Tetris
         }
         private void BeginInput()
         {
-            timer1 = new DispatcherTimer();
-            timer1.Interval = new TimeSpan((int)1e7 / 10);
-            timer1.Tick += timer1_Tick;
+            timer1 = new Timer();
+            timer1.Interval = 1e3 / 15;
+            timer1.Elapsed += timer1_Tick;
+            timer1.Enabled = true;
             timer1.Start();
-
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -44,8 +45,11 @@ namespace Tetris
             {
                 EndInput();
             }
-            KeyDown(ope[timer1_i]);
-            timer1_i++;
+            else
+            {
+                KeyDown(ope[timer1_i]);
+                timer1_i++;
+            }
             if (timer1_i >= ope.Count)
             {
                 EndInput();
@@ -56,7 +60,7 @@ namespace Tetris
         {
             if (timer1 != null)
             {
-                timer1.Tick -= timer1_Tick;
+                timer1.Stop();
                 timer1 = null;
             }
         }
@@ -77,12 +81,14 @@ namespace Tetris
         public override void Pause()
         {
             base.Pause();
-            EndInput();
+            if (timer1!=null)
+                timer1.Stop();
         }
         public override void Continue()
         {
             base.Continue();
-            BeginInput();
+            if (timer1!=null)
+                timer1.Start();
         }
         public void AIStop()
         {

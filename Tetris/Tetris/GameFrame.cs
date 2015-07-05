@@ -15,17 +15,26 @@ namespace Tetris
         /// <summary>
         /// 当准备的方块更新时发出
         /// </summary>
-        public event BoxShapeEventHandle RenewReadyBox;
-        public event BoxShapeEventHandle RenewActiveBox;
+        public event BoxShapeEventHandler RenewReadyBox;
+        public event BoxShapeEventHandler RenewActiveBox;
         /// <summary>
         /// 行被消除时触发
         /// </summary>
-        public event RowEventHandle RowsCleanEvent;
-        public event BoxEventHandle ActiveBoxMoved;
+        public event RowEventHandler RowsCleanEvent;
+        /// <summary>
+        /// 活动方块移动是发生,包含新方块的实例
+        /// </summary>
+        public event BoxEventHandler ActiveBoxMoved;
         /// <summary>
         /// 游戏结束时触发
         /// </summary>
         public event EventHandler GameOverEvent;
+        /// <summary>
+        /// 活动方块移动时发生,包含前后的位置信息
+        /// </summary>
+        public event MoveEventHandler ActiveBoxMoving;
+
+        public event MoveEventHandler ActiveBoxCrushEvent;
         /// <summary>
         /// 构造函数，参数为主体网格,以及行数列数
         /// </summary>
@@ -53,6 +62,7 @@ namespace Tetris
             }
 
             container = new Container(row, column);
+            boxFactory = new BoxFactory();
 
             for (int i = 0; i < row; i++)
             {
@@ -77,43 +87,76 @@ namespace Tetris
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void AddUselessRows(object sender, ScoreEventArgs e)
+        public void OtherCrossThreshold(object sender, ScoreEventArgs e)
         {
-            int holesCnt = 4;
-            Random rand= new Random();
-            List<int> uselessRow = new List<int>();
-            for (int i = 0; i < column; i++)
-                uselessRow.Add(1);
-            for (int i = 0; i < holesCnt; i++)
+            for (int i = 0; i < e.value; i++)
+                AddUselessLines();
+        }
+        public void AddUselessLines(List<int> uselessRow = null)
+        {
+            if (uselessRow == null)
             {
-                int t = rand.Next(column);
-                uselessRow[t] = 0;
-            }
-            for (int r=0;r<row-1;r++)
-            {
-                for (int c=0;c<column;c++)
+                int holesCnt = 4;
+                Random rand = new Random();
+                uselessRow = new List<int>();
+                for (int i = 0; i < column; i++)
+                    uselessRow.Add(1);
+                for (int i = 0; i < holesCnt; i++)
                 {
-                    if (r==0)
+                    int t = rand.Next(column);
+                    uselessRow[t] = 0;
+                }
+            }
+            if (activeBox != null)
+                for (int i = 0; i < 4; i++)
+                {
+                    int tx = activeBox.Entity[i].pos.x;
+                    int ty = activeBox.Entity[i].pos.y;
+                    bool b = true;
+                    if (tx != row - 1)
                     {
-                        if (!UnitAvilible(r,c))
+                        if (!UnitAvilible(tx + 1, ty))
+                        {
+                            b = activeBox.MoveUp();
+                        }
+                    }
+                    else
+                    {
+                        if (uselessRow[ty] == 1)
+                        {
+                            b = activeBox.MoveUp();
+                        }
+                    }
+                    if (!b)
+                    {
+                        GameOver();
+                    }
+                }
+            for (int r = 0; r < row - 1; r++)
+            {
+                for (int c = 0; c < column; c++)
+                {
+                    if (r == 0)
+                    {
+                        if (!UnitAvilible(r, c))
                         {
                             GameOver();
                         }
                     }
-                    BoxShape bs = BoxShape.NULL;
-                    if (container.map[r + 1, c].Value != BoxShape.SHADOW)
-                        if (!activeBox.UnitInBox(r + 1, c))
-                            bs = container.map[r + 1, c].Value;
+                    BoxShape bs = container.map[r + 1, c].Value;
                     container.map[r, c].Value = bs;
                 }
             }
-            for (int c=0;c<column;c++)
+
+            for (int c = 0; c < column; c++)
             {
                 if (uselessRow[c] == 1)
                     container.map[row - 1, c].Value = BoxShape.OBINARY;
                 else
                     container.map[row - 1, c].Value = BoxShape.NULL;
             }
+            if (activeBox!=null)
+                ActiveBoxPositionChanged(null, new MoveEventArgs(null, activeBox.Entity));
         }
         /// <summary>
         /// 列属性
@@ -130,28 +173,32 @@ namespace Tetris
 
             switch (key)
             {
-                case Key.W:case Key.Up:
+                case Key.W:
+                case Key.Up:
                     activeBox.Change();
                     break;
-                case Key.A:case Key.Left:
+                case Key.A:
+                case Key.Left:
                     activeBox.MoveLeft();
                     break;
-                case Key.D:case Key.Right:
+                case Key.D:
+                case Key.Right:
                     activeBox.MoveRight();
                     break;
-                case Key.S:case Key.Down:
+                case Key.S:
+                case Key.Down:
                     activeBox.FastFall();
                     break;
                 default:
                     break;
             }
-           
+
         }
         /// <summary>
         /// 清空地图，默认参数为0——清空
         /// </summary>
         /// <param name="v"></param>
-        protected void ClearMap(int v = 0)
+        public void ClearMap(int v = 0)
         {
             for (int i = 0; i < row; i++)
                 for (int j = 0; j < column; j++)
@@ -169,9 +216,9 @@ namespace Tetris
         {
             if (x >= row || x < 0 || y >= column || y < 0)
                 return false;
-            if (activeBox.UnitInBox(x, y))
-                return true;
-            if (container.map[x, y].Value == BoxShape.NULL || container.map[x,y].Value == BoxShape.SHADOW)
+            //if (activeBox.UnitInBox(x, y))
+            //    return true;
+            if (container.map[x, y].Value == BoxShape.NULL)
             {
                 return true;
             }
@@ -187,6 +234,11 @@ namespace Tetris
             }
             return false;
         }
+
+        public void SetFactorySeed(int s)
+        {
+            boxFactory.SetSeed(s);
+        }
         /// <summary>
         /// 开始工作
         /// </summary>
@@ -197,19 +249,19 @@ namespace Tetris
             ClearMap();
             State = GameState.Active;
 
-            activeBox = BoxFactory.Instance().GetNewBasicBox(this);
-            activeBox.move += this.MapChanged;
-            readyBox = BoxFactory.Instance().GetNewBasicBox(this);
+            activeBox = boxFactory.GetNewBasicBox(this);
+            activeBox.move += this.ActiveBoxPositionChanged;
+            readyBox = boxFactory.GetNewBasicBox(this);
             if (RenewReadyBox != null)
             {
                 RenewReadyBox(this, new BoxShapeEventArgs(readyBox.shape));
             }
-            
+
             if (!activeBox.Act())
             {
                 GameOver();
             }
-            
+
             if (RenewActiveBox != null)
             {
                 RenewActiveBox(this, null);
@@ -239,17 +291,13 @@ namespace Tetris
         {
             State = GameState.Stoped;
             boxNum = 0;
-            if (activeBox!=null)
+            if (activeBox != null)
                 activeBox.Stop();
             activeBox = null;
             readyBox = null;
             if (RenewReadyBox != null)
             {
                 RenewReadyBox(this, null);
-            }
-            if (GameOverEvent != null)
-            {
-                GameOverEvent(this, null);
             }
         }
         /// <summary>
@@ -258,6 +306,10 @@ namespace Tetris
         public void GameOver()
         {
             //ClearMap(999);
+            if (GameOverEvent != null)
+            {
+                GameOverEvent(this, null);
+            }
             Stop();
             //score.??
         }
@@ -309,7 +361,7 @@ namespace Tetris
             for (int i = row - 1; i > 2; i--)
             {
                 int j = 0;
-                while (j < column && container.map[i, j].Value != BoxShape.NULL && container.map[i,j].Value!=BoxShape.BAN)
+                while (j < column && container.map[i, j].Value != BoxShape.NULL && container.map[i, j].Value != BoxShape.BAN)
                     j++;
                 if (j == column)
                 {
@@ -325,31 +377,77 @@ namespace Tetris
             return cl.Count();
         }
         /// <summary>
-        /// 当前方块下落到底部的响应方法
+        /// 用于局域网的沉底时间响应
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void ActiveBoxCrush(Object sender, EventArgs e)
+        /// <param name="netPlayer"></param>
+        /// <param name="list"></param>
+        public void ActiveBoxCrush(Object sender, List<Square> list)
         {
+            //绘制当前活动方块
+            int tx, ty;
+            for (int i = 0; i < 4; i++)
+            {
+                tx = list[i].pos.x;
+                ty = list[i].pos.y;
+                container.map[tx, ty].Value = list[i].value;
+            }
+
             //当前方块掉落到底部
             //消行
             int l = CheckFullLines();
 
-            //更新使用的方块
+            ////停用当前活动方块
+            //activeBox.Stop();
+
+            //GenerateActiveBox();
+        }
+        /// <summary>
+        /// 当前方块下落到底部的响应方法
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ActiveBoxCrush(Object sender, BoxEventArgs e)
+        {
+            if (ActiveBoxCrushEvent != null)
+            {
+                ActiveBoxCrushEvent(this, new MoveEventArgs(null, e.box.Entity));
+            }
+            //绘制当前活动方块
+            int tx, ty;
+            for (int i = 0; i < 4; i++)
+            {
+                tx = e.box.Entity[i].pos.x;
+                ty = e.box.Entity[i].pos.y;
+                container.map[tx, ty].Value = e.box.shape;
+            }
+
+            //当前方块掉落到底部
+            //消行
+            int l = CheckFullLines();
+
+            //停用当前活动方块
             activeBox.Stop();
+
+            GenerateActiveBox();
+
+        }
+        /// <summary>
+        /// 生成新的活动方块
+        /// </summary>
+        public void GenerateActiveBox()
+        {
             activeBox = readyBox;
-            activeBox.move += MapChanged;
+            activeBox.move += ActiveBoxPositionChanged;
             readyBox = null;
 
             bool bOK = true;
-
             if (activeBox != null)
                 bOK = activeBox.Act();
             else bOK = false;
 
             if (bOK)
             {
-                readyBox = BoxFactory.Instance().GetNewBasicBox(this);
+                readyBox = boxFactory.GetNewBasicBox(this);
 
                 add_boxNum(1);
                 if (RenewReadyBox != null)
@@ -358,7 +456,7 @@ namespace Tetris
                 }
                 if (RenewActiveBox != null)
                 {
-                    RenewActiveBox(this,null);
+                    RenewActiveBox(this, null);
                 }
             }
             else
@@ -371,7 +469,7 @@ namespace Tetris
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void MapChanged(Object sender, MoveEventArgs e)
+        public void ActiveBoxPositionChanged(Object sender, MoveEventArgs e)
         {
             ClearGrid(e.period);
             UpdateGrid(e.next);
@@ -379,7 +477,9 @@ namespace Tetris
             if (sender == activeBox)
             {
                 if (ActiveBoxMoved != null)
-                    ActiveBoxMoved(this,new BoxEventArgs(activeBox));
+                    ActiveBoxMoved(this, new BoxEventArgs(activeBox));
+                if (ActiveBoxMoving != null)
+                    ActiveBoxMoving(this, e);
             }
         }
         /// <summary>
@@ -393,7 +493,7 @@ namespace Tetris
             for (int i = 0; i < list.Count; i++)
             {
                 p = list[i].pos;
-                container.map[p.x, p.y].Value = list[i].value;
+                container.map[p.x, p.y].Draw(list[i].value);
             }
         }
         /// <summary>
@@ -407,21 +507,21 @@ namespace Tetris
             for (int i = 0; i < list.Count; i++)
             {
                 p = list[i].pos;
-                container.map[p.x, p.y].Value = BoxShape.NULL;
+                container.map[p.x, p.y].Draw(BoxShape.NULL);
             }
         }
 
         public Container container;
         public Box activeBox;
         public Box readyBox;
-        
-        public GameState State 
-        { 
+
+        public GameState State
+        {
             get { return state; }
             private set
             {
                 state = value;
-                
+
             }
         }
         protected GameState state;
@@ -439,12 +539,12 @@ namespace Tetris
         protected int HardToTimeInterval(double hard)
         {
             double t = hard;
-            t = 1e7 / t;
+            t = 1e3 / t;
             return (int)t;
         }
         protected double TimeIntervalToHard(int interval)
         {
-            return 1e7 / (double)interval;
+            return 1e3 / (double)interval;
         }
 
         public int Row
@@ -452,7 +552,7 @@ namespace Tetris
             get { return row; }
         }
 
-        virtual public void add_boxNum(int v=1)
+        virtual public void add_boxNum(int v = 1)
         {
             boxNum += v;
         }
@@ -464,6 +564,7 @@ namespace Tetris
         protected readonly Grid grid;
         protected readonly int row;
         protected readonly int column;
+        protected readonly BoxFactory boxFactory;
 
 
 

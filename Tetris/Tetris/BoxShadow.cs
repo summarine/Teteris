@@ -8,13 +8,13 @@ namespace Tetris
 {
     class BoxShadow
     {
-        public event MoveEventHandle reflect;
+        public event MoveEventHandler reflect;
 
         public BoxShadow(GameFrame gf)
         {
             //entity = new List<Square>();
             gFrame = gf;
-            reflect += gf.MapChanged;
+            reflect += gf.ActiveBoxPositionChanged;
         }
 
         public void Reflect(Object sender, BoxEventArgs e)
@@ -45,7 +45,7 @@ namespace Tetris
                         break;
                     }
                     ty = entity[i].pos.y;
-                    if (!(gFrame.UnitAvilible(tx, ty) || box.UnitInBox(tx, ty)))
+                    if (!gFrame.UnitAvilible(tx, ty))
                     {
                         b = false; break;
                     }
@@ -73,7 +73,7 @@ namespace Tetris
                     if (temp != null)
                         for (int i = 0; i < temp.Count; i++)
                         {
-                            while (i < temp.Count && box.UnitInBox(temp[i].pos.x, temp[i].pos.y))
+                            while (i < temp.Count && !gFrame.UnitAvilible(temp[i].pos.x,temp[i].pos.y))
                                 temp.Remove(temp[i]);
                         }
                     reflect(this, new MoveEventArgs(temp, entity));
@@ -86,7 +86,7 @@ namespace Tetris
                     if (temp != null)
                         for (int i = 0; i < temp.Count; i++)
                         {
-                            while (i < temp.Count && box.UnitInBox(temp[i].pos.x, temp[i].pos.y))
+                            while (i < temp.Count && (box.UnitInBox(temp[i].pos.x, temp[i].pos.y) || !gFrame.UnitAvilible(temp[i].pos.x,temp[i].pos.y) ))
                                 temp.Remove(temp[i]);
                         }
                     reflect(this, new MoveEventArgs(temp, null));

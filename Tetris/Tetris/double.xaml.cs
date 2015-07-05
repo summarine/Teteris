@@ -26,25 +26,55 @@ namespace Tetris
             InitializeComponent();
 
             int r=19,c=10;
-            myGame = new MyGameFrame(myGrid, r, c);
-            myAIFrame = new AIFrame(aiGrid, r, c);
-            myAIFrame.AIInitialize(new SimpleAI(r,c,myAIFrame));
+            //myGame = new MyGameFrame(myGrid, r, c);
+            myGame = new AIFrame(myGrid, r, c);
+            myGame.AIInitialize(new SimpleAI(r, c, myGame,new Complex_AI_Integrator()));
 
+            myAIFrame = new AIFrame(aiGrid, r, c);
+            myAIFrame.AIInitialize(new SimpleAI(r,c,myAIFrame,new Simple_AI_Integrator()));
+
+            //设置计分板
             plarSc = new DoubleScoringBoard(PlayerScoreLabel);
             myGame.RowsCleanEvent += plarSc.GetScore;
             aiSc = new DoubleScoringBoard(AIScoreLabel);
             myAIFrame.RowsCleanEvent += aiSc.GetScore;
 
-            //增加增行时间的绑定
-            aiSc.CrossThreshold += myGame.AddUselessRows;
-            plarSc.CrossThreshold += myAIFrame.AddUselessRows;
+            plarSc.Threshold = aiSc.Threshold = 800;
+
+            //增加增行函数的事件绑定
+            aiSc.CrossThreshold += myGame.OtherCrossThreshold;
+            plarSc.CrossThreshold += myAIFrame.OtherCrossThreshold;
+
+            //设置游戏结束
+            myGame.GameOverEvent += GameFinish;
+            myGame.GameOverEvent += plarSc.WhenGameOver;
+            myAIFrame.GameOverEvent += GameFinish;
+            myAIFrame.GameOverEvent += aiSc.WhenGameOver;
+
+        }
+
+        private void GameFinish(object sender, EventArgs e)
+        {
+            if (myAIFrame.State != GameState.Stoped)
+                myAIFrame.Stop();
+            if (myGame.State != GameState.Stoped)
+                myGame.Stop();
+
+            if (sender == myGame)
+            {
+                MessageBox.Show("你输了");
+            }
+            else if (sender == myAIFrame)
+            {
+                MessageBox.Show("你赢了");
+            }
         }
 
         private void PauseBtn_Click(object sender, RoutedEventArgs e)
         {
             if (myGame.State == GameState.Active)
             {
-                myAIFrame.Pause();
+                myGame.Pause();
                 myAIFrame.Pause();
             }
         }
@@ -59,6 +89,9 @@ namespace Tetris
             }
             else if (myGame.State == GameState.Stoped)
             {
+                int seed = (new Random()).Next();
+                myGame.SetFactorySeed(seed);
+                myAIFrame.SetFactorySeed(seed);
                 myGame.Start();
                 myAIFrame.Start();
             }   
@@ -70,10 +103,13 @@ namespace Tetris
             {
                 myGame.Stop();
                 myAIFrame.Stop();
+
+                plarSc.Clear();
+                aiSc.Clear();
             }
         }
-        
-        private GameFrame myGame;
+        private AIFrame myGame;
+        //private GameFrame myGame;
         private AIFrame myAIFrame;
         private DoubleScoringBoard plarSc, aiSc;
 
