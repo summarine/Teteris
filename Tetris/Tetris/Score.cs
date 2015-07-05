@@ -12,7 +12,7 @@ namespace Tetris
     public class ScoringBoard : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public event ScoreEventHandle ScoringEnded;
+        public event ScoreEventHandler ScoringEnded;
         /// <summary>
         /// 计分板,必须传入作为UI的Label
         /// </summary>
@@ -25,7 +25,6 @@ namespace Tetris
             binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             scoring_Board.SetBinding(Label.ContentProperty, binding);
 
-            threshold = 500;
             L1 = l1; L2 = l2; L3 = l3; L4 = l4;
         }
 
@@ -57,7 +56,7 @@ namespace Tetris
             {
                 ScoringEnded(this,new ScoreEventArgs(Score));
             }
-            this.score = 0;
+            this.Score = 0;
         }
         public void WhenGameOver(Object sender,EventArgs e)
         {
@@ -80,7 +79,6 @@ namespace Tetris
             }
         }
 
-        protected int threshold;
         protected int score;
         protected int L1, L2, L3, L4;
     }
@@ -90,11 +88,13 @@ namespace Tetris
         /// <summary>
         /// 到达阀值后触发
         /// </summary>
-        public event ScoreEventHandle CrossThreshold;
+        public event ScoreEventHandler CrossThreshold;
+
         public DoubleScoringBoard(Label sc):base(sc)
         {
-            threshold = 400;
+            Threshold = 10000;
         }
+        public int Threshold { get; set; }
 
         public override int Score
         {
@@ -105,13 +105,13 @@ namespace Tetris
             set
             {
                 int temp = value;
-                if (temp > threshold)
+                if (temp >= Threshold)
                 {
                     if (CrossThreshold != null)
                     {
                         CrossThreshold(this, new ScoreEventArgs(1));
                     }
-                    temp -= threshold;
+                    temp -= Threshold;
                 }
                 base.Score = temp;
             }

@@ -1,0 +1,26 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="Tetris.NetGame"
+	x:Name="Window"
+	Title="双人对战"
+    KeyDown="Window_KeyDown_1"
+	Width="1100" Height="720">
+
+    <Grid x:Name="LayoutRoot">
+        <Grid HorizontalAlignment="Left" Height="670" Margin="10,10,0,0" VerticalAlignment="Top" Width="1082">
+            <Label x:Name="Scoring_Board2" Content="Label" HorizontalAlignment="Left" Margin="488.997,86.337,0,0" VerticalAlignment="Top" Height="36.337" Width="114.33"/>
+            <Label x:Name="Scoring_Board1" Content="Label" HorizontalAlignment="Left" Margin="488.997,26.5,0,0" VerticalAlignment="Top" Height="38.837" Width="114.33"/>
+            <Grid x:Name="gameGrid1" HorizontalAlignment="Left" Height="670" Margin="10,0,0,0" VerticalAlignment="Top" Width="440"/>
+            <Grid x:Name="gameGrid2" HorizontalAlignment="Left" Height="670" Margin="642,0,0,0" VerticalAlignment="Top" Width="440"/>
+            <Button HorizontalAlignment="Left" Margin="488.997,158,0,0" VerticalAlignment="Top" Width="121" Height="52" Click="StartBtn_Click">
+                <Image Source="picture/play.png" Stretch="Fill"/>
+            </Button>
+            <Button HorizontalAlignment="Left" Margin="488.997,241.5,0,0" VerticalAlignment="Top" Width="121" Height="44.837" Click="StopBtn_Click">
+                <Image Source="picture/stop.png" Stretch="Fill"/>
+            </Button>
+            <Image x:Name="PreviewImage1" HorizontalAlignment="Left" Height="100" Margin="501.667,366.5,0,0" VerticalAlignment="Top" Width="100"/>
+            <Image x:Name="PreviewImage2" HorizontalAlignment="Left" Height="100" Margin="501.667,517,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.22,0.14"/>
+        </Grid>
+    </Grid>
+</Window>

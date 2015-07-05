@@ -1,0 +1,22 @@
+mark = 100000;
+            mark += highDft[0] * 50;
+            //mark += cleanedLines * 100 * top;
+
+            mark -= trueHoles * 2000;
+            mark -= (holes - trueHoles) * 200;
+
+            mark -= (top - bottom) * (top - bottom) * (top - bottom);
+            mark -= top * top * top;
+
+            mark -= trueFloat * 300;
+
+            for (int i = 1; i < floadSqr.Length; i++)
+            {
+                mark -= floadSqr[i] * (i * 40);
+            }
+
+            for (int i = 2; i < highDft.Length; i++)
+            {
+                mark -= (int)(highDft[i] * (i * i * (1<<Math.Max(top-4,0))));
+            }
+            return mark;

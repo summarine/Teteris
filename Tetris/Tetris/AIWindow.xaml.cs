@@ -22,8 +22,8 @@ namespace Tetris
         public AIWindow()
         {
             InitializeComponent();
-            game = new AIFrame(gameGrid,19,11);
-            game.AIInitialize(new SimpleAI(19,11, game));
+            game = new AIFrame(gameGrid,19,10);
+            game.AIInitialize(new SimpleAI(19,10, game,new Simple_AI_Integrator()));
 
             ScoringBoard sb = new ScoringBoard(Scoring_Board_AI);
             game.RowsCleanEvent += sb.GetScore;
@@ -33,7 +33,7 @@ namespace Tetris
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
         {
-            //BoxFactory.Instance().setSeed(101);
+            game.SetFactorySeed(103);
             game.Start();
         }
 

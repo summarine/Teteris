@@ -27,6 +27,15 @@ namespace Tetris
 
     public class GridData
     {
+        public void Draw(BoxShape bs)
+        {
+            label.Dispatcher.Invoke(
+                               new Action(
+                                          delegate
+                                          {
+                                              label.Background = BoxFactory.GetBoxImageBrush(bs);
+                                          }));
+        }
         public Label Lbl
         {
             get
@@ -45,7 +54,7 @@ namespace Tetris
                 if (value<0) return;
                 this.value = value;
 
-                Convert(this.value);
+                Draw(this.value);
             }
             get
             {
@@ -53,12 +62,8 @@ namespace Tetris
             }
         }
 
-        private void Convert(BoxShape bs)
-        {
-            label.Background = BoxFactory.Instance().GetBoxImageBrush(bs);
-        }
-
         private BoxShape value;
         private Label label;
+
     }
 }
